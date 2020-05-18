@@ -48,7 +48,7 @@ No dependencies are required other than loguru.
 
 import notifypy
 
-notification = notify_py.Notify()
+notification = notifypy.Notify()
 notification.send()
 
 # This sends a notification with the default values.
@@ -71,7 +71,7 @@ import notifypy
 
 # You can quickly initalize with a 'default' message.
 
-notifification = notify_py.Notify(
+notifification = notifypy.Notify(
 	default_notification_title="Function completed",
     defualt_application_name="SuperLongFunction"
 )

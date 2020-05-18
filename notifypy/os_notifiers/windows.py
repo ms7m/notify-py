@@ -48,7 +48,7 @@ class WindowsNotifier(object):
         # add an Id
         image_element.set("id", "1")
         # add the src
-        image_element.set("src", notification_icon.replace("//", "/"))
+        image_element.set("src", notification_icon)
 
         # add the message and title
 
@@ -67,7 +67,9 @@ class WindowsNotifier(object):
 {self._top_ps1_script}
 $APP_ID = "{application_id}"
 
-$template = '{ElementTree.tostring(top_element, encoding="utf-8").decode('utf-8')}' 
+$template = @"
+{ElementTree.tostring(top_element, encoding="utf-8").decode('utf-8')}
+"@
 
 $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
 $xml.LoadXml($template)

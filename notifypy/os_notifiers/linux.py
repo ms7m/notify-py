@@ -38,6 +38,9 @@ class LinuxNotifier(object):
     ):
         try:
 
+            notification_title = " " if notification_title == "" else notification_title
+            notification_subtitle = " " if notification_subtitle == "" else notification_subtitle
+
             generated_command = [
                 self._notify_send_binary.strip(),
                 notification_title,

@@ -3,7 +3,7 @@
   <h1> notify.py </h1>
   <i> Cross platform desktop notifications for Python scripts and applications.</i>
 </div>
-***
+
 
 ## How are they sent?
 

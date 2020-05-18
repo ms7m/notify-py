@@ -23,20 +23,32 @@ class MacOSNotifier(object):
     def _get_bundled_notificator(self):
         """ Gets the bundled notificator.app path """
         try:
-            current_bundled = os.path.join(os.path.dirname(__file__), 'binaries/Notificator.app/Contents')
+            current_bundled = os.path.join(os.path.dirname(__file__), 'binaries/Notificator.app/Contents/Resources/Scripts/notificator')
             return current_bundled
         except Exception:
             logger.exception("Unable to get bundled notifier.")
             return False
 
-    def send_notification(self, notification_title, notification_subtitle, notification_application_name,**kwargs):
-        if kwargs.get("notification_application_icon"):
+    def send_notification(self, notification_title, notification_subtitle, application_name,**kwargs):
+        if kwargs.get("notification_icon"):
             logger.warning("Notification icon is not supported. Read the docs for more information.")
         
         try:
-            generated_command_for_notificator = f"{self._notificator_binary} --title={notification_application_name} --subtitle={notification_title} --message={notification_subtitle}"
-            formatted_command_for_notificator = shlex.split(generated_command_for_notificator)
-            subprocess.check_output(formatted_command_for_notificator)
+
+            notification_title = " " if notification_title == "" else notification_title
+            notification_subtitle = " " if notification_subtitle == "" else notification_subtitle
+
+            generated_command = [
+                self._notificator_binary,
+                "--title",
+                application_name,
+                "--subtitle",
+                notification_title,
+                "--message",
+                notification_subtitle
+            ]
+
+            subprocess.check_output(generated_command)
             return True
         except subprocess.CalledProcessError:
             logger.exception("Unable to send notification.")

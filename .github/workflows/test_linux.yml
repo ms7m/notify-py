@@ -1,0 +1,42 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Test Linux
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+  pull_request:
+    branches:
+      - master
+      - dev
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install latest Falcon
+      run: |
+        pip install falcon
+    - name: Lint with pylint
+      run: |
+        pip install pylint
+        # stop the build if there are Python syntax errors or undefined names
+        pylint --errors-only notifypy/
+    - name: Test with pytest
+      run: |
+        pip install pytest
+        python -m pytest tests/
+    - name: Test Black Formatting
+      run: |
+        pip install black
+        python -m black --check notifypy/

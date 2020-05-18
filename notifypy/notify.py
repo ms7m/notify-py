@@ -45,10 +45,10 @@ class Notify:
         return self._notification_icon
 
     @icon.setter
-    def _set_icon(self, new_icon_path):
+    def icon(self, new_icon_path):
         # first detect if it already exists.
         if pathlib.Path(new_icon_path).exists() == True:
-            self._notification_icon = new_icon_path
+            self._notification_icon = str(pathlib.Path(new_icon_path).absolute())
         else:
             # Ok doesn't exist, let's try a join
             if (

@@ -4,6 +4,9 @@
   <i> Cross platform desktop notifications for Python scripts and applications.</i>
 </div>
 
+![Test Linux](https://github.com/ms7m/notify-py/workflows/Test%20Linux/badge.svg)
+ ![Test macOS](https://github.com/ms7m/notify-py/workflows/Test%20macOS/badge.svg)
+ ![Test Windows](https://github.com/ms7m/notify-py/workflows/Test%20Windows/badge.svg)
 
 ## How are they sent?
 

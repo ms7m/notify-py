@@ -8,7 +8,7 @@ from setuptools import Command, find_packages, setup
 import notifypy
 
 setup(
-    name="notify_py",
+    name="notifypy",
     version=notifypy.__version__,
     author="Mustafa Mohamed",
     author_email="ms7mohamed@gmail.com",

@@ -107,4 +107,4 @@ def super_long_function():
 
 - https://github.com/go-toast/toast - Ported their Windows 10 toast notification to Python.
 
-- [Vítor Galvão](https://github.com/vitorgalvao) for https://github.com/ms7m/notificator
+- [Vítor Galvão](https://github.com/vitorgalvao) for https://github.com/vitorgalvao/notificator

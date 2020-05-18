@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install loguru
-        sudo apt-get install libnotify-dev
+        sudo apt-get install libnotify-bin
     - name: Lint with pylint
       run: |
         pip install pylint

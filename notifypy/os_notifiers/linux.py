@@ -2,6 +2,7 @@ from loguru import logger
 import subprocess
 import shlex
 
+
 class LinuxNotifier(object):
     def __init__(self):
         """ Main Linux Notification Class 
@@ -39,7 +40,9 @@ class LinuxNotifier(object):
         try:
 
             notification_title = " " if notification_title == "" else notification_title
-            notification_subtitle = " " if notification_subtitle == "" else notification_subtitle
+            notification_subtitle = (
+                " " if notification_subtitle == "" else notification_subtitle
+            )
 
             generated_command = [
                 self._notify_send_binary.strip(),
@@ -48,9 +51,7 @@ class LinuxNotifier(object):
             ]
 
             if notification_icon:
-                generated_command.append(
-                    f"--icon={shlex.quote(notification_icon)}"
-                )
+                generated_command.append(f"--icon={shlex.quote(notification_icon)}")
             subprocess.check_output(generated_command)
             return True
         except subprocess.CalledProcessError:

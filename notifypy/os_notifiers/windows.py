@@ -94,7 +94,9 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         # open the temporary directory
         with tempfile.TemporaryDirectory() as temp_dir:
             generated_uuid_file = str(uuid.uuid4())
-            with open(f"{temp_dir}/{generated_uuid_file}.ps1", "w", encoding="utf-8") as ps1_file:
+            with open(
+                f"{temp_dir}/{generated_uuid_file}.ps1", "w", encoding="utf-8"
+            ) as ps1_file:
                 ps1_file.write(generated_file)
             # exceute the file
             subprocess.call(

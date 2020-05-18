@@ -29,7 +29,7 @@ No dependencies are required other than loguru.
 ## Install
 
 - PyPi
-  - ``pip install notify_py``
+  - ``pip install "notify-py"``
 - Install the latest development build
   - Install the wheel from Github Releases Tab.
 

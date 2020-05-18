@@ -3,37 +3,88 @@ import pathlib
 import os
 import subprocess
 import shlex
+import shellescape
+from xml.etree import ElementTree
+
+import tempfile
+import uuid
 
 from loguru import logger
 
 class WindowsNotifier(object):
     def __init__(self):
-        """ Main Windows notification. Supplied by snoretoast.exe """
-        call_find_snoretoast = self._get_bundled_snoretoast()
-        if call_find_snoretoast == False:
-            logger.info("Unable to find snoretoast.exe")
-            raise Exception
-        if call_find_snoretoast != False:
-            self._snoretoast_binary = call_find_snoretoast
+        """ Main Notification System for Windows. Basically ported from go-toast/toast """
 
-    def _get_bundled_snoretoast(self):
-        """ Gets the bundled snoretoast.exe path """
-        try:
-            current_bundled = os.path.join(os.path.dirname(__file__), 'binaries\\snoretoast.exe')
-            return current_bundled
-        except Exception:
-            logger.exception("Unable to get bundled notifier.")
-            return False
+        # Create the base 
+        self._top_ps1_script = f"""
+[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+[Windows.UI.Notifications.ToastNotification, Windows.UI.Notifications, ContentType = WindowsRuntime] | Out-Null
+[Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType = WindowsRuntime] | Out-Null
+"""
+    def _generate_notification_xml(self, application_id, notification_title, notification_subtitle, notification_icon):
 
-    def send_notification(self, notification_title, notification_message, notification_icon, notification_application_name="Python Application (Notify.py)"):
-        try:
-            generated_command = f"{self._snoretoast_binary} -t={notification_title} -m={notification_message} -p={notification_icon} -appId={notification_application_name}"
-            formatted_command = shlex.split(generated_command)
-            subprocess.check_output(formatted_command)
-            return True
-        except subprocess.CalledProcessError:
-            logger.exception("Unable to send notification.")
-            return False
-        except Exception:
-            logger.exception("Unhandled Exception for Sending Notification.")
-            return False
+        # Create the top <toast> element
+        top_element = ElementTree.Element("toast")
+        # set the duration for the top element
+        top_element.set('duration', "short")
+        
+        # create the <visual> element
+        visual_element = ElementTree.SubElement(top_element, "visual")
+
+        # create <binding> element
+        binding_element = ElementTree.SubElement(visual_element, "binding")
+        # add the required attribute for this.
+        # For some reason, go-toast set the template attribute to "ToastGeneric"
+        # but it never worked for me. 
+        binding_element.set("template", "ToastImageAndText02")
+
+        # create <image> element 
+        image_element = ElementTree.SubElement(binding_element, "image")
+        # add an Id
+        image_element.set("id", "1")
+        # add the src
+        image_element.set("src", notification_icon.replace("//", "/"))
+
+        # add the message and title
+
+        title_element = ElementTree.SubElement(binding_element, "text")
+        title_element.set('id', "1")
+        title_element.text = notification_title
+
+        message_element = ElementTree.SubElement(binding_element, "text")
+        message_element.set('id', "2")
+        message_element.text = notification_subtitle
+
+        # Great we have a generated XML notification.
+        # We need to create the rest of the .ps1 file and dump it to the temporary directory
+
+        generated_ps1_file = f"""
+{self._top_ps1_script}
+$APP_ID = "{application_id}"
+
+$template = '{ElementTree.tostring(top_element, encoding="utf-8").decode('utf-8')}' 
+
+$xml = New-Object Windows.Data.Xml.Dom.XmlDocument
+$xml.LoadXml($template)
+$toast = New-Object Windows.UI.Notifications.ToastNotification $xml
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier($APP_ID).Show($toast)
+"""     
+        return generated_ps1_file
+
+
+    def send_notification(self, notification_title, notification_subtitle, notification_icon, application_name):
+        generated_file = self._generate_notification_xml(notification_title=notification_title, notification_subtitle=notification_subtitle, notification_icon=notification_icon, application_id=application_name)
+        # open the temporary directory
+        with tempfile.TemporaryDirectory() as temp_dir:
+            generated_uuid_file = str(uuid.uuid4())
+            with open(f"{temp_dir}/{generated_uuid_file}.ps1", "w") as ps1_file:
+                ps1_file.write(generated_file)
+            # exceute the file
+            subprocess.call([
+                "Powershell",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                f"{generated_uuid_file}.ps1"
+            ], cwd=temp_dir)
+        return True

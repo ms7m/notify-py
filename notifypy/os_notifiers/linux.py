@@ -2,7 +2,6 @@ from loguru import logger
 import subprocess
 import shlex
 
-
 class LinuxNotifier(object):
     def __init__(self):
         """ Main Linux Notification Class 
@@ -38,12 +37,21 @@ class LinuxNotifier(object):
         self, notification_title, notification_subtitle, notification_icon, **kwargs
     ):
         try:
-            generated_command = f'{self._notify_send_binary} "{notification_title}" "{notification_subtitle}"'
-            if notification_icon:
-                generated_command += f' --icon="{notification_icon}"'
 
-            formatted_command = shlex.split(generated_command)
-            subprocess.check_output(formatted_command)
+            notification_title = " " if notification_title == "" else notification_title
+            notification_subtitle = " " if notification_subtitle == "" else notification_subtitle
+
+            generated_command = [
+                self._notify_send_binary.strip(),
+                notification_title,
+                notification_subtitle,
+            ]
+
+            if notification_icon:
+                generated_command.append(
+                    f"--icon={shlex.quote(notification_icon)}"
+                )
+            subprocess.check_output(generated_command)
             return True
         except subprocess.CalledProcessError:
             logger.exception("Unable to send notification.")

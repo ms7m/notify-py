@@ -1,6 +1,7 @@
 import platform
 import os
 import pathlib
+import threading
 
 from loguru import logger
 
@@ -87,17 +88,32 @@ class Notify:
     def application_name(self, new_application_name):
         self._notification_application_name = new_application_name
 
-    def send(self):
+    def send(self, block=False):
+        # if block is True, wait for the notification to complete and return if it was successful
+        # else start the thread and return a threading.Event that will determine when the notification was successful
+        event = threading.Event()
         try:
-            return self.send_notification(
+            thread = threading.Thread(target=lambda: self.start_notification_thread(event))
+            thread.start()
+            if block:
+                thread.join(timeout=35)
+                return event.is_set()
+            return event
+        except Exception:
+            logger.exception("Exception in running send-Notification.")
+            raise
+
+    def start_notification_thread(self, event):
+        result = self.send_notification(
                 supplied_title=self._notification_title,
                 supplied_message=self._notification_message,
                 supplied_application_name=self._notification_application_name,
                 supplied_icon_path=self._notification_icon,
             )
-        except Exception:
-            logger.exception("Exception in running send-Notification.")
-            raise
+        if result:
+            event.set()
+        else:
+            event.clear()
 
     def send_notification(
         self,

@@ -88,7 +88,7 @@ class Notify:
     def application_name(self, new_application_name):
         self._notification_application_name = new_application_name
 
-    def send(self, block=False):
+    def send(self, block=True):
         # if block is True, wait for the notification to complete and return if it was successful
         # else start the thread and return a threading.Event that will determine when the notification was successful
         event = threading.Event()

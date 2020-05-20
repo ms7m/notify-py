@@ -94,7 +94,9 @@ class Notify:
         # else start the thread and return a threading.Event that will determine when the notification was successful
         event = threading.Event()
         try:
-            thread = threading.Thread(target=lambda: self.start_notification_thread(event))
+            thread = threading.Thread(
+                target=lambda: self.start_notification_thread(event)
+            )
             thread.name = "notify.py"
             thread.start()
             if block:
@@ -107,11 +109,11 @@ class Notify:
 
     def start_notification_thread(self, event):
         result = self.send_notification(
-                supplied_title=self._notification_title,
-                supplied_message=self._notification_message,
-                supplied_application_name=self._notification_application_name,
-                supplied_icon_path=self._notification_icon,
-            )
+            supplied_title=self._notification_title,
+            supplied_message=self._notification_message,
+            supplied_application_name=self._notification_application_name,
+            supplied_icon_path=self._notification_icon,
+        )
         if result:
             event.set()
         else:

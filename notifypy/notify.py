@@ -3,6 +3,7 @@ import os
 import pathlib
 import threading
 
+
 from loguru import logger
 
 
@@ -94,6 +95,7 @@ class Notify:
         event = threading.Event()
         try:
             thread = threading.Thread(target=lambda: self.start_notification_thread(event))
+            thread.name = "notify.py"
             thread.start()
             if block:
                 thread.join(timeout=35)

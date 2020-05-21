@@ -115,6 +115,10 @@ notification.send(block=False)
 
 ***
 
+
+### Contributors
+- [Laterax](https://github.com/Leterax)
+***
 ### Special Thanks
 
 - https://github.com/go-toast/toast - Ported their Windows 10 toast notification to Python.

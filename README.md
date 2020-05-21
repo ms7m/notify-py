@@ -85,6 +85,15 @@ def super_long_function():
     
 ```
 
+```python
+
+import notifypy
+
+notification = notify.Notify()
+# Send the notification without blocking.
+
+notification.send(block=False)
+```
 ***
 
 
@@ -93,7 +102,7 @@ def super_long_function():
 
 - As it stands (May 18, 2020), this is simply a notification service. There is *no* support for embedding custom actions (buttons, dialogs) regardless of platform. Other then telling you if the shell command was sent, there is also no confirmation on user action on the notification. 
 
-- This is **blocking**. This will block most programs when *sending* the notification. This will be changed in the future. This *may* cause GUI applications to freeze. Do your own testing.
+~~- This is **blocking**. This will block most programs when *sending* the notification. This will be changed in the future. This *may* cause GUI applications to freeze. Do your own testing.~~ v0.0.8.
 
 - There is no support for sending custom sounds, and is silent for most platforms. (notable exclusion is windows.). This will be changed in the future.
 - macOS does **not** support custom icons OTF. You will need to bundle a customized version of the notifier embedded with your custom icon. 

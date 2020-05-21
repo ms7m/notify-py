@@ -49,3 +49,12 @@ def test_rtl_language_notification():
     n.title = "مرحبا كيف الحال؟"
     assert n.send() == True
 
+def test_blocking_notification():
+    n = notifypy.Notify()
+    assert n.send(block=True) == True
+
+def test_non_blocking_notification():
+    n = notifypy.Notify()
+    thread_notify = n.send(block=False)
+    assert thread_notify.wait()
+    

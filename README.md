@@ -105,7 +105,7 @@ notification.send(block=False)
 ~~- This is **blocking**. This will block most programs when *sending* the notification. This will be changed in the future. This *may* cause GUI applications to freeze. Do your own testing.~~ v0.0.8.
 
 - There is no support for sending custom sounds, and is silent for most platforms. (notable exclusion is windows.). This will be changed in the future.
-- macOS does **not** support custom icons OTF. You will need to bundle a customized version of the notifier embedded with your custom icon. 
+- macOS does **not** support custom icons on the fly.. You will need to bundle a customized version of the notifier embedded with your custom icon. [Learn how to do it here](https://github.com/ms7m/notify-py/wiki/Adding-a-custom-icon-to-macOS-Notifications.)
 
 
 

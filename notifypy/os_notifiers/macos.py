@@ -37,6 +37,10 @@ class MacOSNotifier(object):
             logger.warning(
                 "Notification icon is not supported. Read the docs for more information."
             )
+        if kwargs.get("notification_audio"):
+            logger.warning(
+                "Notification audio is not supported. Read the docs for more information."
+            )
 
         try:
 

@@ -14,13 +14,14 @@ class LinuxNotifier(object):
         """
         call_find_notify_send = self._find_installed_notify_send()
 
-        if call_find_notify_send == False:
+        if not call_find_notify_send:
             logger.error("Unable to find notify-send.")
             raise Exception("Unable to find notify-send")
-        if call_find_notify_send != False:
+        if call_find_notify_send:
             self._notify_send_binary = call_find_notify_send
 
-    def _find_installed_notify_send(self):
+    @staticmethod
+    def _find_installed_notify_send():
         """ Function to find the path for notify-send """
         try:
             run_which_for_notify_send = subprocess.check_output(
@@ -35,7 +36,12 @@ class LinuxNotifier(object):
             return False
 
     def send_notification(
-        self, notification_title, notification_subtitle, notification_icon, **kwargs
+        self,
+        notification_title,
+        notification_subtitle,
+        notification_icon,
+        notification_audio,
+        **kwargs,
     ):
         try:
 
@@ -52,6 +58,14 @@ class LinuxNotifier(object):
 
             if notification_icon:
                 generated_command.append(f"--icon={shlex.quote(notification_icon)}")
+
+            if notification_audio:
+                subprocess.Popen(
+                    ["aplay", notification_audio],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
+
             subprocess.check_output(generated_command)
             return True
         except subprocess.CalledProcessError:

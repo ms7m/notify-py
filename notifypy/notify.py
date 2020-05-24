@@ -54,6 +54,10 @@ class Notify:
 
     @audio.setter
     def audio(self, new_audio_path):
+        if new_audio_path is None:
+            self._notification_audio = new_audio_path
+            return
+
         # we currently only support .wav files
         if not new_audio_path.endswith(".wav"):
             raise ValueError("Only .wav files are supported.")

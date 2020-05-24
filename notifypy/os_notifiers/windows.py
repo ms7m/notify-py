@@ -2,7 +2,10 @@ import pathlib
 import os
 import subprocess
 from xml.etree import ElementTree
-import winsound
+try:
+    import winsound
+except ModuleNotFoundError:
+    pass
 
 import tempfile
 import uuid

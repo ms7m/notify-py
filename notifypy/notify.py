@@ -7,9 +7,6 @@ import threading
 from loguru import logger
 
 
-from .os_notifiers import LinuxNotifier, MacOSNotifier, WindowsNotifier
-
-
 class Notify:
     def __init__(
         self,
@@ -37,10 +34,16 @@ class Notify:
     def _selected_notification_system():
         selected_platform = platform.system()
         if selected_platform == "Linux":
+            from .os_notifiers import LinuxNotifier
+
             return LinuxNotifier
         elif selected_platform == "Darwin":
+            from .os_notifiers import MacOSNotifier
+
             return MacOSNotifier
         elif selected_platform == "Windows":
+            from .os_notifiers import WindowsNotifier
+
             return WindowsNotifier
         else:
             raise Exception("Unable to detect platform.")

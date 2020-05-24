@@ -66,7 +66,7 @@ class Notify:
                     os.path.dirname(__file__), new_audio_path
                 )
             else:
-                raise Exception(
+                raise ValueError(
                     f"Unable to set audio file to '{new_audio_path}'. Please make sure it exists."
                 )
 

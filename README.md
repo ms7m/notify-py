@@ -117,7 +117,7 @@ notification.send(block=False)
 
 
 ### Contributors
-- [Laterax](https://github.com/Leterax)
+- [Leterax](https://github.com/Leterax)
 ***
 ### Special Thanks
 

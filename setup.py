@@ -1,4 +1,3 @@
-
 import io
 import os
 import sys
@@ -29,7 +28,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    install_requires=[
-        "loguru==0.4.1"
-    ]
+    install_requires=["loguru==0.4.1"],
 )

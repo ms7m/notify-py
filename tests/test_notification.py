@@ -1,4 +1,5 @@
 import notifypy
+import pytest
 
 
 def test_normal_notification():
@@ -65,3 +66,15 @@ def test_non_blocking_notification():
     n = notifypy.Notify()
     thread_notify = n.send(block=False)
     assert thread_notify.wait()
+
+
+def test_custom_audio():
+    n = notifypy.Notify()
+    n.audio = "notifypy/example_notification_sound.wav"
+    assert n.send() == True
+
+
+def test_custom_audio_no_file():
+    n = notifypy.Notify()
+    with pytest.raises(ValueError):
+        n.audio = "not a file!"

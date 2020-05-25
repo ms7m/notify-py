@@ -5,7 +5,13 @@ import threading
 
 
 from loguru import logger
-
+from .exceptions import (
+    UnsupportedPlatform,
+    InvalidAudioPath,
+    InvalidIconPath,
+    NotificationFailure,
+    BinaryNotFound
+)
 
 class Notify:
     def __init__(
@@ -46,7 +52,7 @@ class Notify:
 
             return WindowsNotifier
         else:
-            raise Exception("Unable to detect platform.")
+            raise UnsupportedPlatform("Platform couldn't be detected, please manually specifiy platform.")
 
     @property
     def audio(self):
@@ -73,9 +79,7 @@ class Notify:
                     os.path.dirname(__file__), new_audio_path
                 )
             else:
-                raise ValueError(
-                    f"Unable to set audio file to '{new_audio_path}'. Please make sure it exists."
-                )
+                raise InvalidAudioPath(f"Could not find specified audio path to '{new_audio_path}'. Please check if it exists.")
 
     @property
     def icon(self):
@@ -95,7 +99,7 @@ class Notify:
                     os.path.dirname(__file__), new_icon_path
                 )
             else:
-                raise Exception("Unable to set icon.")
+                raise InvalidIconPath(f"Could not find specified icon path to '{new_icon_path}'. Please check if it exists.")
 
     @property
     def title(self):
@@ -136,7 +140,7 @@ class Notify:
                 return event.is_set()
             return event
         except Exception:
-            logger.exception("Exception in running send-Notification.")
+            logger.exception('Unhandled exception for sending notification.')
             raise
 
     def start_notification_thread(self, event):
@@ -176,4 +180,4 @@ class Notify:
             return attempt_to_send_notifiation
         except Exception:
             logger.exception("Exception on sending notification.")
-            raise
+            raise NotificationFailure

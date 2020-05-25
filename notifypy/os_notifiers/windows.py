@@ -2,6 +2,10 @@ import pathlib
 import os
 import subprocess
 from xml.etree import ElementTree
+try:
+    import winsound
+except ModuleNotFoundError:
+    pass
 
 import tempfile
 import uuid
@@ -26,6 +30,7 @@ class WindowsNotifier(object):
         notification_title,
         notification_subtitle,
         notification_icon,
+        notification_audio,
     ):
 
         # Create the top <toast> element
@@ -60,6 +65,11 @@ class WindowsNotifier(object):
         message_element.set("id", "2")
         message_element.text = notification_subtitle
 
+        if notification_audio:
+            # the user has provided his own audio file, no need to play the default sound.
+            audio_element = ElementTree.SubElement(top_element, "audio")
+            audio_element.set("silent", "true")
+
         # Great we have a generated XML notification.
         # We need to create the rest of the .ps1 file and dump it to the temporary directory
 
@@ -84,13 +94,21 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         notification_subtitle,
         notification_icon,
         application_name,
+        notification_audio,
     ):
         generated_file = self._generate_notification_xml(
             notification_title=notification_title,
             notification_subtitle=notification_subtitle,
             notification_icon=notification_icon,
             application_id=application_name,
+            notification_audio=notification_audio,
         )
+
+        if notification_audio:
+            winsound.PlaySound(
+                notification_audio, winsound.SND_ASYNC | winsound.SND_FILENAME
+            )
+
         # open the temporary directory
         with tempfile.TemporaryDirectory() as temp_dir:
             generated_uuid_file = str(uuid.uuid4())

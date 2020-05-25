@@ -117,10 +117,12 @@ notification.send(block=False)
 
 
 ### Contributors
-- [Laterax](https://github.com/Leterax)
+- [Leterax](https://github.com/Leterax)
 ***
 ### Special Thanks
 
 - https://github.com/go-toast/toast - Ported their Windows 10 toast notification to Python.
 
 - [Vítor Galvão](https://github.com/vitorgalvao) for https://github.com/vitorgalvao/notificator
+
+- https://notificationsounds.com/notification-sounds/done-for-you-612 example_notification_sound.wav

@@ -36,7 +36,3 @@ jobs:
       run: |
         pip install pytest
         python -m pytest tests/
-    - name: Test Black Formatting
-      run: |
-        pip install black
-        python -m black --check notifypy/

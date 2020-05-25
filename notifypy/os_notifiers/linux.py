@@ -2,6 +2,11 @@ from loguru import logger
 import subprocess
 import shlex
 
+from ..exceptions import (
+    BinaryNotFound,
+    NotificationFailure
+)
+
 
 class LinuxNotifier(object):
     def __init__(self):
@@ -16,9 +21,31 @@ class LinuxNotifier(object):
 
         if not call_find_notify_send:
             logger.error("Unable to find notify-send.")
-            raise Exception("Unable to find notify-send")
+            raise BinaryNotFound("notify-send is required for sending linux notifications.")
         if call_find_notify_send:
             self._notify_send_binary = call_find_notify_send
+
+        call_find_aplay = self._find_installed_aplay()
+        if not call_find_aplay:
+            # no Aplay is available. 
+            self._aplay_binary = False
+        else:
+            self._aplay_binary = call_find_aplay
+
+    @staticmethod
+    def _find_installed_aplay():
+        """ Function to find the path for notify-send """
+        try:
+            run_which_for_aplay = subprocess.check_output(
+                ["which", "aplay"]
+            )
+            return run_which_for_aplay.decode("utf-8")
+        except subprocess.CalledProcessError:
+            logger.exception("Unable to find aplay.")
+            return False
+        except Exception:
+            logger.exception("Unhandled exception for finding aplay.")
+            return False
 
     @staticmethod
     def _find_installed_notify_send():
@@ -60,8 +87,12 @@ class LinuxNotifier(object):
                 generated_command.append(f"--icon={shlex.quote(notification_icon)}")
 
             if notification_audio:
+
+                if self._aplay_binary == False:
+                    raise BinaryNotFound("aplay is required for audio.")
+
                 subprocess.Popen(
-                    ["aplay", notification_audio],
+                    [self._aplay_binary.strip(), notification_audio],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )

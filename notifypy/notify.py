@@ -20,9 +20,7 @@ class Notify:
         default_notification_title="Default Title",
         default_notification_message="Default Message",
         default_notification_application_name="Python Application (notify.py)",
-        default_notification_icon=os.path.join(
-            os.path.dirname(__file__), "py-logo.png"
-        ),
+        default_notification_icon=None,
         default_notification_audio=None,
     ):
         """ Main Notify Object, this handles communication with other functions to send notifications across different
@@ -34,8 +32,18 @@ class Notify:
         self._notification_title = default_notification_title
         self._notification_message = default_notification_message
         self._notification_application_name = default_notification_application_name
-        self._notification_icon = default_notification_icon
-        self._notification_audio = default_notification_audio
+
+        # These defaults require verification
+        if default_notification_icon:
+            self._notification_icon = self._verify_icon_path(default_notification_icon)
+        else:
+            self._notification_icon = str(os.path.join(os.path.dirname(__file__), "py-logo.png"))
+
+        if default_notification_audio:
+            self._notification_audio = self._verify_audio_path(default_notification_audio)
+        else:
+            self._notification_audio = None
+
 
     @staticmethod
     def _selected_notification_system():
@@ -55,32 +63,51 @@ class Notify:
         else:
             raise UnsupportedPlatform("Platform couldn't be detected, please manually specifiy platform.")
 
+
+    @staticmethod
+    def _verify_audio_path(new_audio_path):
+        # we currently only support .wav files
+        if not new_audio_path.endswith(".wav"):
+            raise InvalidAudioFormat
+        
+        # first detect if it already exists.
+        if pathlib.Path(new_audio_path).exists():
+            return str(pathlib.Path(new_audio_path).absolute())
+        else:
+            # Ok doesn't exist, let's try a join
+            if pathlib.Path(
+                os.path.join(os.path.dirname(__file__), new_audio_path)
+            ).exists():
+                return str(os.path.join(
+                    os.path.dirname(__file__), new_audio_path
+                ))
+            else:
+                raise InvalidAudioPath(f"Could not find specified audio path to '{new_audio_path}'. Please check if it exists.")
+    
+    @staticmethod
+    def _verify_icon_path(new_icon_path):
+        # first detect if it already exists.
+        if pathlib.Path(new_icon_path).exists():
+            return str(pathlib.Path(new_icon_path).absolute())
+        else:
+            # Ok doesn't exist, let's try a join
+            if pathlib.Path(
+                os.path.join(os.path.dirname(__file__), new_icon_path)
+            ).exists():
+                return os.path.join(
+                    os.path.dirname(__file__), new_icon_path
+                )
+            else:
+                raise InvalidIconPath(f"Could not find specified icon path to '{new_icon_path}'. Please check if it exists.")
+
+
     @property
     def audio(self):
         return self._notification_audio
 
     @audio.setter
     def audio(self, new_audio_path):
-        if new_audio_path is None:
-            self._notification_audio = new_audio_path
-            return
-
-        # we currently only support .wav files
-        if not new_audio_path.endswith(".wav"):
-            raise InvalidAudioPath
-        # first detect if it already exists.
-        if pathlib.Path(new_audio_path).exists():
-            self._notification_audio = str(pathlib.Path(new_audio_path).absolute())
-        else:
-            # Ok doesn't exist, let's try a join
-            if pathlib.Path(
-                os.path.join(os.path.dirname(__file__), new_audio_path)
-            ).exists():
-                self._notification_audio = os.path.join(
-                    os.path.dirname(__file__), new_audio_path
-                )
-            else:
-                raise InvalidAudioPath(f"Could not find specified audio path to '{new_audio_path}'. Please check if it exists.")
+        self._notification_audio = self._verify_audio_path(new_audio_path)
 
     @property
     def icon(self):
@@ -88,19 +115,8 @@ class Notify:
 
     @icon.setter
     def icon(self, new_icon_path):
-        # first detect if it already exists.
-        if pathlib.Path(new_icon_path).exists():
-            self._notification_icon = str(pathlib.Path(new_icon_path).absolute())
-        else:
-            # Ok doesn't exist, let's try a join
-            if pathlib.Path(
-                os.path.join(os.path.dirname(__file__), new_icon_path)
-            ).exists():
-                self._notification_icon = os.path.join(
-                    os.path.dirname(__file__), new_icon_path
-                )
-            else:
-                raise InvalidIconPath(f"Could not find specified icon path to '{new_icon_path}'. Please check if it exists.")
+        self._notification_icon = self._verify_icon_path(new_icon_path)
+
 
     @property
     def title(self):

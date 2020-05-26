@@ -2,11 +2,6 @@ import pathlib
 import os
 import subprocess
 from xml.etree import ElementTree
-try:
-    import winsound
-except ModuleNotFoundError:
-    pass
-
 import tempfile
 import uuid
 
@@ -105,8 +100,11 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         )
 
         if notification_audio:
-            winsound.PlaySound(
-                notification_audio, winsound.SND_ASYNC | winsound.SND_FILENAME
+            subprocess.Popen(
+                [
+                    "Powershell",
+                    f'(New-Object Media.SoundPlayer "{notification_audio}").playsync()'
+                ]
             )
 
         # open the temporary directory

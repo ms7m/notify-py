@@ -28,6 +28,7 @@ jobs:
       run: |
         pip install loguru
         sudo apt-get install libnotify-bin
+        sudo apt-get install alsa
     - name: Lint with pylint
       run: |
         pip install pylint

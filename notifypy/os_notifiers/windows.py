@@ -103,7 +103,7 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
             subprocess.Popen(
                 [
                     "Powershell",
-                    f'(New-Object Media.SoundPlayer "{notification_audio}").playsync()'
+                    f'(New-Object Media.SoundPlayer "{notification_audio}").playsync()',
                 ]
             )
 

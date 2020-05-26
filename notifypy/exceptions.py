@@ -2,22 +2,59 @@
 # Custom and Clear Exceptions for NotifyPy
 
 
-class UnsupportedPlatform(Exception):
+class BaseNotifyPyException(BaseException):
+    """ Base Exception to be Inheritied """
+
+
+class UnsupportedPlatform(BaseNotifyPyException):
     """ Unsupported Platform, notify-py might not work as expected """
-    pass
+    def __init__(self, platform):
+        self.platform = platform
 
-class InvalidAudioPath(Exception):
+    def __repr__(self):
+        return f"{self.platform} is not supported."
+
+    def __str__(self):
+        return f"{self.platform} is not supported."
+
+
+
+class InvalidAudioPath(BaseNotifyPyException):
     """ Audio path provided is invalid."""
-    pass
+    def __repr__(self):
+        return f"Unable to find audio path. Please check if it exists."
 
-class InvalidIconPath(Exception):
+    def __str__(self):
+        return f"Unable to find audio path. Please check if it exists."
+
+class InvalidAudioFormat(BaseNotifyPyException):
+    """ The custom audio provided is not a supported file """
+    def __repr__(self):
+        return f"Only .wav files are supported."
+    
+    def __str__(self):
+        return f"Only .wav files are supported."
+
+class InvalidIconPath(BaseNotifyPyException):
     """ Icon Path Provided is Invalid """
-    pass
+    def __repr__(self):
+        return f"Unable to find icon path. Please check if it exists."
 
-class NotificationFailure(Exception):
+    def __str__(self):
+        return f"Unable to find icon path. Please check if it exists."
+
+
+class NotificationFailure(BaseNotifyPyException):
     """ Overall function failed """
     pass
 
-class BinaryNotFound(Exception):
+class BinaryNotFound(BaseNotifyPyException):
     """" A specified binary requirement was not found """
-    pass
+    def __init__(self, binary):
+        self.binary = binary
+
+    def __repr__(self):
+        return f"Unable find required {self.binary}. Please check if it's installed."
+
+    def __str__(self):
+        return f"Unable to find required {self.binary}. Please check if it's installed."

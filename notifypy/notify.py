@@ -10,7 +10,8 @@ from .exceptions import (
     InvalidAudioPath,
     InvalidIconPath,
     NotificationFailure,
-    BinaryNotFound
+    BinaryNotFound,
+    InvalidAudioFormat
 )
 
 class Notify:
@@ -66,7 +67,7 @@ class Notify:
 
         # we currently only support .wav files
         if not new_audio_path.endswith(".wav"):
-            raise ValueError("Only .wav files are supported.")
+            raise InvalidAudioPath
         # first detect if it already exists.
         if pathlib.Path(new_audio_path).exists():
             self._notification_audio = str(pathlib.Path(new_audio_path).absolute())

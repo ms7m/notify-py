@@ -17,7 +17,7 @@ class MacOSNotifier(object):
         call_find_notificator = self._get_bundled_notificator()
         if call_find_notificator == False:
             logger.info("Unable to find notificator.")
-            raise BinaryNotFound("Unable to find notificator.")
+            raise BinaryNotFound("Binary Notificator")
         if call_find_notificator != False:
             self._notificator_binary = call_find_notificator
 

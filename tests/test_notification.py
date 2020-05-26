@@ -76,7 +76,7 @@ def test_custom_audio():
 
 def test_custom_audio_no_file():
     n = notifypy.Notify()
-    with pytest.raises(notifypy.exceptions.InvalidAudioPath):
+    with pytest.raises(notifypy.exceptions.InvalidAudioFormat):
         n.audio = "not a file!"
 
 def test_non_existant_icon():

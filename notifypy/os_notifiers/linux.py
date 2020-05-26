@@ -2,10 +2,7 @@ from loguru import logger
 import subprocess
 import shlex
 
-from ..exceptions import (
-    BinaryNotFound,
-    NotificationFailure
-)
+from ..exceptions import BinaryNotFound, NotificationFailure
 
 
 class LinuxNotifier(object):
@@ -27,7 +24,7 @@ class LinuxNotifier(object):
 
         call_find_aplay = self._find_installed_aplay()
         if not call_find_aplay:
-            # no Aplay is available. 
+            # no Aplay is available.
             self._aplay_binary = False
         else:
             self._aplay_binary = call_find_aplay
@@ -36,9 +33,7 @@ class LinuxNotifier(object):
     def _find_installed_aplay():
         """ Function to find the path for notify-send """
         try:
-            run_which_for_aplay = subprocess.check_output(
-                ["which", "aplay"]
-            )
+            run_which_for_aplay = subprocess.check_output(["which", "aplay"])
             return run_which_for_aplay.decode("utf-8")
         except subprocess.CalledProcessError:
             logger.exception("Unable to find aplay.")

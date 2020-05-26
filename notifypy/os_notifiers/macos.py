@@ -4,10 +4,8 @@ import subprocess
 import shlex
 
 from loguru import logger
-from ..exceptions import (
-    BinaryNotFound,
-    NotificationFailure
-)
+from ..exceptions import BinaryNotFound, NotificationFailure
+
 
 class MacOSNotifier(object):
     def __init__(self):

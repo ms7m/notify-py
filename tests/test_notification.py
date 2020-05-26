@@ -83,3 +83,15 @@ def test_non_existant_icon():
     n = notifypy.Notify()
     with pytest.raises(notifypy.exceptions.InvalidIconPath):
         n.icon = "ttt"
+
+def test_invalid_icon_default():
+    with pytest.raises(notifypy.exceptions.InvalidIconPath):
+        n = notifypy.Notify(default_notification_icon="sadfiasjdfisaodfj")
+
+def test_invalid_audio_default():
+    with pytest.raises(notifypy.exceptions.InvalidAudioPath):
+        n = notifypy.Notify(default_notification_audio="dsaiofj/sadf/vv.wav")
+
+def test_invalid_audio_format_default():
+    with pytest.raises(notifypy.exceptions.InvalidAudioFormat):
+        n = notifypy.Notify(default_notification_audio='asdfiojasdfioj')

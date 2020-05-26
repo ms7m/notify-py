@@ -12,35 +12,60 @@ class MacOSNotifier(object):
         """ Main macOS Notification System, supplied by a custom-made notificator app. 
         Icon Support is **not** supported. You'll need to create your own bundle for that.
         """
-        call_find_notificator = self._get_bundled_notificator()
-        if call_find_notificator == False:
-            logger.info("Unable to find notificator.")
-            raise BinaryNotFound("Binary Notificator")
-        if call_find_notificator != False:
+        call_find_notificator = self._find_bundled_notificator()
+
+        if not call_find_notificator:
+            logger.error("Unable to find Bundled Notificator")
+            raise BinaryNotFound("bundled notifcator.")
+        if call_find_notificator:
             self._notificator_binary = call_find_notificator
 
-    def _get_bundled_notificator(self):
-        """ Gets the bundled notificator.app path """
+        call_find_afplay = self._find_installed_afplay()
+        if not call_find_afplay:
+            # no Afplay is available.
+            self._afplay_binary = False
+        else:
+            self._afplay_binary = call_find_afplay
+
+    @staticmethod
+    def _find_bundled_notificator():
+        """ Gets the bundled Notifcator """
         try:
             current_bundled = os.path.join(
                 os.path.dirname(__file__),
                 "binaries/Notificator.app/Contents/Resources/Scripts/notificator",
             )
-            return current_bundled
+            if pathlib.Path(current_bundled).exists():
+                return current_bundled
+            raise BinaryNotFound("afplay")
         except Exception:
-            logger.exception("Unable to get bundled notifier.")
+            logger.exception("Unhandled exception for finding afplay.")
+            raise
+
+    @staticmethod
+    def _find_installed_afplay():
+        """ Function to find the path for afplay """
+        try:
+            run_which_for_aplay = subprocess.check_output(["which", "afplay"])
+            return run_which_for_aplay.decode("utf-8")
+        except subprocess.CalledProcessError:
+            logger.exception("Unable to find aplay.")
+            return False
+        except Exception:
+            logger.exception("Unhandled exception for finding aplay.")
             return False
 
     def send_notification(
-        self, notification_title, notification_subtitle, application_name, **kwargs
+        self,
+        notification_title,
+        notification_subtitle,
+        application_name,
+        notification_audio,
+        **kwargs
     ):
         if kwargs.get("notification_icon"):
             logger.warning(
                 "Notification icon is not supported. Read the docs for more information."
-            )
-        if kwargs.get("notification_audio"):
-            logger.warning(
-                "Notification audio is not supported. Read the docs for more information."
             )
 
         try:
@@ -49,6 +74,17 @@ class MacOSNotifier(object):
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
             )
+
+            if notification_audio:
+
+                if self._afplay_binary == False:
+                    raise BinaryNotFound("afplay")
+
+                subprocess.Popen(
+                    [self._afplay_binary.strip(), notification_audio],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
 
             generated_command = [
                 self._notificator_binary,

@@ -2,23 +2,27 @@
 <br>
   <h1> notify.py </h1>
   <i> Cross platform desktop notifications for Python scripts and applications.</i>
+  <br>
+  <br>
+  <p align="center">
+    <img src="https://github.com/ms7m/notify-py/workflows/Test%20Linux/badge.svg">
+    <img src="https://github.com/ms7m/notify-py/workflows/Test%20macOS/badge.svg">
+    <img src="https://github.com/ms7m/notify-py/workflows/Test%20Windows/badge.svg">
+  </p>
+  <br>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Available-on%20PyPi-blue?logoColor=white&logo=Python">
+    <img src="https://img.shields.io/badge/Python-3.6%2B-blue?logo=python">
+    <img src="https://img.shields.io/badge/Formatting-Black-black.svg">
+  </p>
 </div>
 
-![Test Linux](https://github.com/ms7m/notify-py/workflows/Test%20Linux/badge.svg)
- ![Test macOS](https://github.com/ms7m/notify-py/workflows/Test%20macOS/badge.svg)
- ![Test Windows](https://github.com/ms7m/notify-py/workflows/Test%20Windows/badge.svg)
 
-## How are they sent?
+## Supported Platforms.
 
-- Windows
-  - Notifications are natively sent with ``windows.ui.notifications`` through Powershell.
-- macOS
-  - Notifications are sent with a bundled .app. 
-    - Please read below on setting application icons.
-- Linux
-  - Notifications are sent with notify-send.
-
-
+- Windows 10
+- macOS 10 >=10.10
+- Linux (libnotify)
 
 No dependencies are required other than loguru.
 
@@ -28,86 +32,90 @@ No dependencies are required other than loguru.
 
 ## Install
 
-- PyPi
-  - ``pip install "notify-py"``
-- Install the latest development build
-  - Install the wheel from Github Releases Tab.
-
-
-
-
+```
+pip install notify-py
+```
 
 ***
 
 ## Usage
 
 
-
+**Send Simple Notification**
 ```python
-# Send a simple text notification.
 
-import notifypy
+from notifypy import Notify
 
-notification = notifypy.Notify()
-notification.send()
+notification = Notify()
+notification.title = "Cool Title"
+notification.message = "Even cooler message."
+```
 
-# This sends a notification with the default values.
+**Send Notification With Icon**
+```python
 
+from notifypy import Notify
 
-# Updating the values
-
-notification.title = "Really Cool Title"
+notification = Notify()
+notification.title = "Cool Title"
 notification.message = "Even cooler message."
 notification.icon = "path/to/icon.png"
-notification.application_name = "SuperCoolApp"
+
+notification.send()
+```
+
+**Send Notification With Sound**
+```python
+
+from notifypy import Notify
+
+notification = Notify()
+notification.title = "Cool Title"
+notification.message = "Even cooler message."
+notification.audio = "path/to/audio/file.wav"
 
 notification.send()
 
+```
+
+**Sending Notifications without blocking**
+```python
+
+from notifypy import Notify
+
+notification = Notify()
+notification.send(block=False)
 
 ```
 
+
+**Sending with Default Notification Titles/Messages/Icons**
 ```python
-import notifypy
 
-# You can quickly initalize with a 'default' message.
+from notifypy import Notify
 
-notifification = notifypy.Notify(
-	default_notification_title="Function completed",
-    defualt_application_name="SuperLongFunction"
+notification = Notify(
+  default_notification_title="Function Message",
+  default_application_name="Great Application",
+  default_notification_icon="path/to/icon.png",
+  default_notification_audio="path/to/sound.wav"
 )
 
-def super_long_function():
-    # super long stuff here
-    result = result_of_long_function
-    
-   	notification.message = str(result_of_long_function)
-    notification.send()
-    
+def your_function():
+  # stuff happening here.
+  notification.message = "Function Result"
+  notification.send()
 ```
 
-```python
-
-import notifypy
-
-notification = notify.Notify()
-# Send the notification without blocking.
-
-notification.send(block=False)
-```
 ***
-
-
 
 ## Important Caveats 
 
 - As it stands (May 18, 2020), this is simply a notification service. There is *no* support for embedding custom actions (buttons, dialogs) regardless of platform. Other then telling you if the shell command was sent, there is also no confirmation on user action on the notification. 
 
-~~- This is **blocking**. This will block most programs when *sending* the notification. This will be changed in the future. This *may* cause GUI applications to freeze. Do your own testing.~~ v0.0.8.
+- macOS does **not** support custom icons on the fly.. You will need to bundle a customized version of the notifier embedded with your custom icon. 
 
-- There is no support for sending custom sounds, and is silent for most platforms. (notable exclusion is windows.). This will be changed in the future.
-- macOS does **not** support custom icons OTF. You will need to bundle a customized version of the notifier embedded with your custom icon. 
-
-
+***
 
 ### Windows Specific.
 
@@ -119,10 +127,20 @@ notification.send(block=False)
 ### Contributors
 - [Leterax](https://github.com/Leterax)
 ***
-### Special Thanks
+### Inspiration and Special Thanks
 
 - https://github.com/go-toast/toast - Ported their Windows 10 toast notification to Python.
 
 - [Vítor Galvão](https://github.com/vitorgalvao) for https://github.com/vitorgalvao/notificator
 
 - https://notificationsounds.com/notification-sounds/done-for-you-612 example_notification_sound.wav
+
+- https://github.com/mikaelbr/node-notifier
+
+***
+
+# Contributing
+Contributions are welcome. 
+
+- Tests are ran against all platforms.
+- Black formatting is required.

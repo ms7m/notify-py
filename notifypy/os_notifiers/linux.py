@@ -21,7 +21,7 @@ class LinuxNotifier(object):
 
         if not call_find_notify_send:
             logger.error("Unable to find notify-send.")
-            raise BinaryNotFound("notify-send is required for sending linux notifications.")
+            raise BinaryNotFound("notify-send")
         if call_find_notify_send:
             self._notify_send_binary = call_find_notify_send
 
@@ -89,7 +89,7 @@ class LinuxNotifier(object):
             if notification_audio:
 
                 if self._aplay_binary == False:
-                    raise BinaryNotFound("aplay is required for audio.")
+                    raise BinaryNotFound("aplay (Alsa)")
 
                 subprocess.Popen(
                     [self._aplay_binary.strip(), notification_audio],

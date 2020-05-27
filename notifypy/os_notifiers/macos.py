@@ -4,21 +4,33 @@ import subprocess
 import shlex
 
 from loguru import logger
-from ..exceptions import BinaryNotFound, NotificationFailure
+from ..exceptions import BinaryNotFound, NotificationFailure, InvalidMacOSNotificator
+from ._base import BaseNotifier
 
-
-class MacOSNotifier(object):
-    def __init__(self):
+class MacOSNotifier(BaseNotifier):
+    def __init__(self, **kwargs):
         """ Main macOS Notification System, supplied by a custom-made notificator app. 
         Icon Support is **not** supported. You'll need to create your own bundle for that.
         """
-        call_find_notificator = self._find_bundled_notificator()
 
-        if not call_find_notificator:
-            logger.error("Unable to find Bundled Notificator")
-            raise BinaryNotFound("bundled notifcator.")
-        if call_find_notificator:
-            self._notificator_binary = call_find_notificator
+
+        if kwargs.get("custom_mac_notificator"):
+            """ This optional kwarg exists for the use of using a custom (made) notificator without building a .whl """
+            selected_custom_notificator = kwargs.get('custom_mac_notificator')
+            if (pathlib.Path(selected_custom_notificator) / "Contents/Resources/Scripts/notificator").exists():
+                self._notificator_binary  = str(pathlib.Path(selected_custom_notificator).absolute())
+            else:
+                raise InvalidMacOSNotificator
+        else:
+            call_find_notificator = self._find_bundled_notificator()
+            if not call_find_notificator:
+                logger.error("Unable to find Bundled Notificator")
+                raise BinaryNotFound("bundled notifcator.")
+            if call_find_notificator:
+                self._notificator_binary = call_find_notificator
+
+
+
 
         call_find_afplay = self._find_installed_afplay()
         if not call_find_afplay:

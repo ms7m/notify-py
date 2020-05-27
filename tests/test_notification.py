@@ -1,6 +1,10 @@
 import notifypy
 import pytest
+import pathlib
+import platform
 
+
+from notifypy import BaseNotifier
 
 def test_normal_notification():
     n = notifypy.Notify()
@@ -95,3 +99,33 @@ def test_invalid_audio_default():
 def test_invalid_audio_format_default():
     with pytest.raises(notifypy.exceptions.InvalidAudioFormat):
         n = notifypy.Notify(default_notification_audio='asdfiojasdfioj')
+
+def test_custom_notification():
+    class CustomNotificator(BaseNotifier):
+        def __init__(self, **kwargs):
+            pass
+
+    n = notifypy.Notify(override_detected_notification_system=CustomNotificator)
+    assert n._notifier_detect == CustomNotificator
+
+def test_invalid_custom_notification():
+    class CustomNotificator:
+        pass
+
+    with pytest.raises(ValueError):
+        notifypy.Notify(override_detected_notification_system=CustomNotificator)
+
+def test_unexposed_inherit_baseNotifier():
+    with pytest.raises(NotImplementedError):
+        class CustomNotificator(BaseNotifier):
+            pass
+
+        CustomNotificator().send_notification()
+
+@pytest.mark.skipif(platform.platform() != "Darwin", reason="macOS only test.")
+def test_macOS_custom_notificator():
+    custom_notificator_path = str(pathlib.Path(__file__).resolve().parent / "Notificator.app")
+    n = notifypy.Notify(custom_mac_notificator=custom_notificator_path)
+    assert n._notifier._notificator_binary == custom_notificator_path 
+    assert n.send() == True
+

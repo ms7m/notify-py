@@ -6,9 +6,9 @@ import tempfile
 import uuid
 
 from loguru import logger
+from ._base import BaseNotifier
 
-
-class WindowsNotifier(object):
+class WindowsNotifier(BaseNotifier):
     def __init__(self):
         """ Main Notification System for Windows. Basically ported from go-toast/toast """
 

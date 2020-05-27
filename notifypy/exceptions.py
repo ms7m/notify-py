@@ -65,3 +65,11 @@ class BinaryNotFound(BaseNotifyPyException):
 
     def __str__(self):
         return f"Unable to find required {self.binary}. Please check if it's installed."
+
+class InvalidMacOSNotificator(BaseNotifyPyException):
+    """ The provided notificator is invalid. """
+    def __str__(self):
+        return f"The provided notificator is invalid. Please read the documentation for more information."
+
+    def __repr__(self):
+        return f"The provided notificator is invalid. Please read the documentation for more information."

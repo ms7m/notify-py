@@ -14,6 +14,16 @@ from .exceptions import (
     InvalidAudioFormat,
 )
 
+from .os_notifiers import (
+    LinuxNotifier,
+    MacOSNotifier,
+    WindowsNotifier
+)
+
+from .os_notifiers._base import BaseNotifier
+
+
+
 
 class Notify:
     def __init__(
@@ -23,11 +33,31 @@ class Notify:
         default_notification_application_name="Python Application (notify.py)",
         default_notification_icon=None,
         default_notification_audio=None,
+        **kwargs
     ):
         """ Main Notify Object, this handles communication with other functions to send notifications across different
         platforms """
-        self._notifier_detect = self._selected_notification_system()
-        self._notifier = self._notifier_detect()
+
+
+
+        if kwargs.get("override_detected_notification_system"):
+            """ 
+            This optional kwarg allows for the use of overriding the detected notifier.
+            Use at your own risk 
+            """
+            selected_override = kwargs.get("override_detected_notification_system")
+            if issubclass(selected_override, BaseNotifier):
+                self._notifier_detect = selected_override
+            else:
+                raise ValueError("Overrided Notifier must inherit from BaseNotifier.")
+        else:  
+            self._notifier_detect = self._selected_notification_system()
+        
+        
+        
+
+        # Initialize.
+        self._notifier = self._notifier_detect(**kwargs)
 
         # Set the defaults.
         self._notification_title = default_notification_title
@@ -53,17 +83,15 @@ class Notify:
     def _selected_notification_system():
         selected_platform = platform.system()
         if selected_platform == "Linux":
-            from .os_notifiers import LinuxNotifier
 
             return LinuxNotifier
         elif selected_platform == "Darwin":
-            from .os_notifiers import MacOSNotifier
 
             return MacOSNotifier
         elif selected_platform == "Windows":
-            from .os_notifiers import WindowsNotifier
-
-            return WindowsNotifier
+            if platform.release() == "10":
+                return WindowsNotifier
+            raise UnsupportedPlatform(f"This version of Windows ({platform.release()}) is not supported.")
         else:
             raise UnsupportedPlatform(
                 "Platform couldn't be detected, please manually specifiy platform."

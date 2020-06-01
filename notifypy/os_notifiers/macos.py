@@ -18,7 +18,11 @@ class MacOSNotifier(BaseNotifier):
             """ This optional kwarg exists for the use of using a custom (made) notificator without building a .whl """
             selected_custom_notificator = kwargs.get('custom_mac_notificator')
             if (pathlib.Path(selected_custom_notificator) / "Contents/Resources/Scripts/notificator").exists():
-                self._notificator_binary  = str(pathlib.Path(selected_custom_notificator).absolute())
+                current_selected_binary  = str(pathlib.Path(selected_custom_notificator).absolute())
+                if os.access(current_selected_binary, os.X_OK):
+                    self._notificator_binary = current_selected_binary
+                else:
+                    raise InvalidMacOSNotificator("Unable to access binary, you might need to update the permissions.")
             else:
                 raise InvalidMacOSNotificator
         else:

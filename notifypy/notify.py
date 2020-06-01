@@ -29,11 +29,16 @@ class Notify:
         default_notification_audio=None,
         **kwargs,
     ):
-        """ Main Notify Object, this handles communication with other functions to send notifications across different
-        platforms """
+        """Main Notify Class.
 
-        if kwargs.get("disable_logging"):
-            """ This kwarg will disable logging from this library """
+        Optional Arugments:
+            override_detected_notification_system: Optional Kwarg that allows for the use of overrding the detected notifier.
+            disable_logging: Optional Kwarg that will disable stdout logging from this library.
+            custom_mac_notificator: Optional Kwarg for a custom mac notifier. (Probably because you want to change the icon.). This is a direct path to the parent directory (.app).
+
+        """
+
+        if not kwargs.get("enable_logging"):
             logger.disable("notifypy")
 
         if kwargs.get("override_detected_notification_system"):
@@ -130,6 +135,11 @@ class Notify:
 
     @property
     def audio(self):
+        """A direct path to a '.wav' audio file.
+
+        Returns:
+            str: direct path to '.wav' audio file.
+        """
         return self._notification_audio
 
     @audio.setter
@@ -138,6 +148,13 @@ class Notify:
 
     @property
     def icon(self):
+        """A direct path to a '.png' image file.
+        Note: .jpg might work, but hasn't been fully tested.
+        macOS does not support setting this attribute.
+
+        Returns:
+            str: A direct path to a '.png' image file.
+        """
         return self._notification_icon
 
     @icon.setter
@@ -146,6 +163,13 @@ class Notify:
 
     @property
     def title(self):
+        """The top (often bolded) message for the notification.
+
+        macOS (as of 0.2.0) the application name takes the bolded area, while the title is directly below it.
+
+        Returns:
+            str: The top (often bolded) message for the notification.
+        """
         return self._notification_title
 
     @title.setter
@@ -154,6 +178,11 @@ class Notify:
 
     @property
     def message(self):
+        """The main message to be displayed in the notification. Directly below the title.
+
+        Returns:
+            str: The message for the notification.
+        """
         return self._notification_message
 
     @message.setter
@@ -162,6 +191,12 @@ class Notify:
 
     @property
     def application_name(self):
+        """The application name that will be displayed (if the platform allows it.)
+        Windows and macOS requires an application name to be displayed.
+
+        Returns:
+            str: the application name
+        """
         return self._notification_application_name
 
     @application_name.setter
@@ -169,6 +204,15 @@ class Notify:
         self._notification_application_name = new_application_name
 
     def send(self, block=True):
+        """Main send function. This will take all attributes sent and forward to
+        send_notification.
+
+        Args:
+            block (bool, optional): Optional value to not to block the main application thread. If enabled this won't return a bool. Defaults to True.
+
+        Returns:
+            bool: as long as the block isn't set to False.
+        """
         # if block is True, wait for the notification to complete and return if it was successful
         # else start the thread and return a threading.Event that will determine when the notification was successful
         event = threading.Event()
@@ -187,6 +231,12 @@ class Notify:
             raise
 
     def start_notification_thread(self, event):
+        """Function for sending notification via a seperate thread. 
+        You don't need to call this directly. Do .send(block=False)
+
+        Args:
+            event (threading.Thread): event to be recieved.
+        """
         result = self.send_notification(
             supplied_title=self._notification_title,
             supplied_message=self._notification_message,
@@ -207,6 +257,21 @@ class Notify:
         supplied_icon_path,
         supplied_audio_path,
     ):
+        """A function to handles sending all required variables to respected OS-Notifier. 
+
+        Args:
+            supplied_title str: Title for notification
+            supplied_message str: Message for notification
+            supplied_application_name str: Application name for notification (if platform needs it)
+            supplied_icon_path str: Direct path to custom icon
+            supplied_audio_path str: Direct path to custom audio
+
+        Raises:
+            NotificationFailure: If there was an Exception in sending the notification.
+
+        Returns:
+            bool: --
+        """
         try:
             attempt_to_send_notifiation = self._notifier.send_notification(
                 notification_title=supplied_title,

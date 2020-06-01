@@ -66,7 +66,7 @@ class MacOSNotifier(BaseNotifier):
             )
             if pathlib.Path(current_bundled).exists():
                 return current_bundled
-            raise BinaryNotFound("afplay")
+            raise BinaryNotFound("bundled notifier.app")
         except Exception:
             logger.exception("Unhandled exception for finding afplay.")
             raise

@@ -36,11 +36,10 @@ class Notify:
             disable_logging: Optional Kwarg that will disable stdout logging from this library.
             custom_mac_notificator: Optional Kwarg for a custom mac notifier. (Probably because you want to change the icon.). This is a direct path to the parent directory (.app).
 
-        """   
+        """
 
         if not kwargs.get("enable_logging"):
             logger.disable("notifypy")
-            
 
         if kwargs.get("override_detected_notification_system"):
             """ 
@@ -140,7 +139,7 @@ class Notify:
 
         Returns:
             str: direct path to '.wav' audio file.
-        """        
+        """
         return self._notification_audio
 
     @audio.setter
@@ -155,7 +154,7 @@ class Notify:
 
         Returns:
             str: A direct path to a '.png' image file.
-        """        
+        """
         return self._notification_icon
 
     @icon.setter
@@ -170,7 +169,7 @@ class Notify:
 
         Returns:
             str: The top (often bolded) message for the notification.
-        """        
+        """
         return self._notification_title
 
     @title.setter

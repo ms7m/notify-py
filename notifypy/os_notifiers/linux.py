@@ -5,6 +5,7 @@ import shlex
 from ..exceptions import BinaryNotFound, NotificationFailure
 from ._base import BaseNotifier
 
+
 class LinuxNotifier(BaseNotifier):
     def __init__(self):
         """ Main Linux Notification Class 

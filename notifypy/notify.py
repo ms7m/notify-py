@@ -14,15 +14,9 @@ from .exceptions import (
     InvalidAudioFormat,
 )
 
-from .os_notifiers import (
-    LinuxNotifier,
-    MacOSNotifier,
-    WindowsNotifier
-)
+from .os_notifiers import LinuxNotifier, MacOSNotifier, WindowsNotifier
 
 from .os_notifiers._base import BaseNotifier
-
-
 
 
 class Notify:
@@ -33,16 +27,15 @@ class Notify:
         default_notification_application_name="Python Application (notify.py)",
         default_notification_icon=None,
         default_notification_audio=None,
-        **kwargs
+        **kwargs,
     ):
         """ Main Notify Object, this handles communication with other functions to send notifications across different
         platforms """
 
-
         if kwargs.get("disable_logging"):
             """ This kwarg will disable logging from this library """
             logger.disable("notifypy")
-            
+
         if kwargs.get("override_detected_notification_system"):
             """ 
             This optional kwarg allows for the use of overriding the detected notifier.
@@ -53,11 +46,8 @@ class Notify:
                 self._notifier_detect = selected_override
             else:
                 raise ValueError("Overrided Notifier must inherit from BaseNotifier.")
-        else:  
+        else:
             self._notifier_detect = self._selected_notification_system()
-        
-        
-        
 
         # Initialize.
         self._notifier = self._notifier_detect(**kwargs)
@@ -94,7 +84,9 @@ class Notify:
         elif selected_platform == "Windows":
             if platform.release() == "10":
                 return WindowsNotifier
-            raise UnsupportedPlatform(f"This version of Windows ({platform.release()}) is not supported.")
+            raise UnsupportedPlatform(
+                f"This version of Windows ({platform.release()}) is not supported."
+            )
         else:
             raise UnsupportedPlatform(
                 "Platform couldn't be detected, please manually specifiy platform."

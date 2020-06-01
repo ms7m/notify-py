@@ -21,14 +21,23 @@ class MacOSNotifier(BaseNotifier):
                 pathlib.Path(selected_custom_notificator)
                 / "Contents/Resources/Scripts/notificator"
             ).exists():
-                current_selected_binary = str(
-                    pathlib.Path(selected_custom_notificator).absolute()
-                )
-                if os.access(current_selected_binary, os.X_OK):
-                    self._notificator_binary = current_selected_binary
+                current_selected_binary = pathlib.Path(
+                    selected_custom_notificator
+                ).absolute()
+                if os.access(
+                    (
+                        current_selected_binary
+                        / "Contents/Resources/Scripts/notificator"
+                    ),
+                    os.X_OK,
+                ):
+                    self._notificator_binary = str(
+                        current_selected_binary
+                        / "Contents/Resources/Scripts/notificator"
+                    )
                 else:
                     raise InvalidMacOSNotificator(
-                        "Unable to execute binary, you might need to set permissions."
+                        "Unable to access binary, you might need to update the permissions."
                     )
             else:
                 raise InvalidMacOSNotificator

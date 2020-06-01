@@ -39,7 +39,10 @@ class Notify:
         platforms """
 
 
-
+        if kwargs.get("disable_logging"):
+            """ This kwarg will disable logging from this library """
+            logger.disable("notifypy")
+            
         if kwargs.get("override_detected_notification_system"):
             """ 
             This optional kwarg allows for the use of overriding the detected notifier.

@@ -1,0 +1,8 @@
+site_name: notify-py
+nav:
+    - Home: index.md
+    - Sending Notifications: sending_notifications.md
+    - Creating Custom Notifications: custom_notifications.md
+    - Custom macOS notification icons: custom_mac_notifications.md
+    - Optional Arguments: optional_arguments.md
+theme: readthedocs

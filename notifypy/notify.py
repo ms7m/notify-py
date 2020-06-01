@@ -257,7 +257,7 @@ class Notify:
         supplied_application_name,
         supplied_icon_path,
         supplied_audio_path,
-    ): 
+    ):
         """A function to handles sending all required variables to respected OS-Notifier. 
 
         Args:

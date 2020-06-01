@@ -7,22 +7,38 @@ from loguru import logger
 from ..exceptions import BinaryNotFound, NotificationFailure, InvalidMacOSNotificator
 from ._base import BaseNotifier
 
+
 class MacOSNotifier(BaseNotifier):
     def __init__(self, **kwargs):
         """ Main macOS Notification System, supplied by a custom-made notificator app. 
         Icon Support is **not** supported. You'll need to create your own bundle for that.
         """
 
-
         if kwargs.get("custom_mac_notificator"):
             """ This optional kwarg exists for the use of using a custom (made) notificator without building a .whl """
-            selected_custom_notificator = kwargs.get('custom_mac_notificator')
-            if (pathlib.Path(selected_custom_notificator) / "Contents/Resources/Scripts/notificator").exists():
-                current_selected_binary  = str(pathlib.Path(selected_custom_notificator).absolute())
-                if os.access(current_selected_binary, os.X_OK):
-                    self._notificator_binary = current_selected_binary
+            selected_custom_notificator = kwargs.get("custom_mac_notificator")
+            if (
+                pathlib.Path(selected_custom_notificator)
+                / "Contents/Resources/Scripts/notificator"
+            ).exists():
+                current_selected_binary = pathlib.Path(
+                    selected_custom_notificator
+                ).absolute()
+                if os.access(
+                    (
+                        current_selected_binary
+                        / "Contents/Resources/Scripts/notificator"
+                    ),
+                    os.X_OK,
+                ):
+                    self._notificator_binary = str(
+                        current_selected_binary
+                        / "Contents/Resources/Scripts/notificator"
+                    )
                 else:
-                    raise InvalidMacOSNotificator("Unable to access binary, you might need to update the permissions.")
+                    raise InvalidMacOSNotificator(
+                        "Unable to access binary, you might need to update the permissions."
+                    )
             else:
                 raise InvalidMacOSNotificator
         else:
@@ -32,9 +48,6 @@ class MacOSNotifier(BaseNotifier):
                 raise BinaryNotFound("bundled notifcator.")
             if call_find_notificator:
                 self._notificator_binary = call_find_notificator
-
-
-
 
         call_find_afplay = self._find_installed_afplay()
         if not call_find_afplay:

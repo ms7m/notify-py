@@ -41,6 +41,8 @@ class Notify:
 
         if not enable_logging:
             logger.disable("notifypy")
+        else:
+            logger.info("Logging is enabled.")
 
         if kwargs.get("override_detected_notification_system"):
             """ 
@@ -275,11 +277,11 @@ class Notify:
         """
         try:
             attempt_to_send_notifiation = self._notifier.send_notification(
-                notification_title=supplied_title,
-                notification_subtitle=supplied_message,
-                application_name=supplied_application_name,
-                notification_icon=supplied_icon_path,
-                notification_audio=supplied_audio_path,
+                notification_title=str(supplied_title),
+                notification_subtitle=str(supplied_message),
+                application_name=str(supplied_application_name),
+                notification_icon=str(supplied_icon_path),
+                notification_audio=str(supplied_audio_path),
             )
             if attempt_to_send_notifiation:
                 logger.info("Sent notification.")

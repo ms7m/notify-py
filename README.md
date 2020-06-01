@@ -18,6 +18,10 @@
 </div>
 
 
+## Docs
+
+[Read the Docs here](https://ms7m.github.io/notify-py/)
+
 ## Supported Platforms.
 
 - Windows 10

@@ -27,6 +27,7 @@ class Notify:
         default_notification_application_name="Python Application (notify.py)",
         default_notification_icon=None,
         default_notification_audio=None,
+        enable_logging=False,
         **kwargs,
     ):
         """Main Notify Class.
@@ -38,7 +39,7 @@ class Notify:
 
         """
 
-        if not kwargs.get("enable_logging"):
+        if not enable_logging:
             logger.disable("notifypy")
 
         if kwargs.get("override_detected_notification_system"):
@@ -256,7 +257,7 @@ class Notify:
         supplied_application_name,
         supplied_icon_path,
         supplied_audio_path,
-    ):
+    ): 
         """A function to handles sending all required variables to respected OS-Notifier. 
 
         Args:
@@ -270,7 +271,7 @@ class Notify:
             NotificationFailure: If there was an Exception in sending the notification.
 
         Returns:
-            bool: --
+            bool: True if the notification was sent.
         """
         try:
             attempt_to_send_notifiation = self._notifier.send_notification(

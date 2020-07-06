@@ -281,7 +281,9 @@ class Notify:
                 notification_subtitle=str(supplied_message),
                 application_name=str(supplied_application_name),
                 notification_icon=str(supplied_icon_path),
-                notification_audio=supplied_audio_path,
+                notification_audio=str(supplied_audio_path)
+                if supplied_audio_path
+                else None,
             )
             if attempt_to_send_notifiation:
                 logger.info("Sent notification.")

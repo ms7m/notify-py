@@ -20,7 +20,7 @@
 
 ## Docs
 
-[Read the Docs here](https://ms7m.github.io/notify-py/)
+You can read the docs on this Git's Wiki, or [here](https://ms7m.github.io/notify-py/)
 
 ## Supported Platforms.
 

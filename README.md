@@ -16,10 +16,7 @@
     <img src="https://img.shields.io/badge/Formatting-Black-black.svg">
   </p>
     <p align="center">
-    <figure>
-      <img src="./docs/site/img/windows-demo-pic.png" alt="Trulli" style="width:100%">
-      <figcaption>Windows 10 Build 18363</figcaption>
-    </figure> 
+      <img src="./docs/site/img/windows-demo-pic.png">
     <h1>
   </p>
 </div>

@@ -16,7 +16,7 @@
     <img src="https://img.shields.io/badge/Formatting-Black-black.svg">
   </p>
     <p align="center">
-      <img src="./docs/site/img/windows-demo-pic.png">
+      <img src="./docs/site/img/demopics.png">
     <h1>
   </p>
 </div>

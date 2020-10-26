@@ -45,9 +45,9 @@ class Notify:
             logger.info("Logging is enabled.")
 
         if kwargs.get("override_detected_notification_system"):
-            """ 
+            """
             This optional kwarg allows for the use of overriding the detected notifier.
-            Use at your own risk 
+            Use at your own risk
             """
             selected_override = kwargs.get("override_detected_notification_system")
             if issubclass(selected_override, BaseNotifier):
@@ -234,7 +234,7 @@ class Notify:
             raise
 
     def start_notification_thread(self, event):
-        """Function for sending notification via a seperate thread. 
+        """Function for sending notification via a seperate thread.
         You don't need to call this directly. Do .send(block=False)
 
         Args:
@@ -260,7 +260,7 @@ class Notify:
         supplied_icon_path,
         supplied_audio_path,
     ):
-        """A function to handles sending all required variables to respected OS-Notifier. 
+        """A function to handles sending all required variables to respected OS-Notifier.
 
         Args:
             supplied_title str: Title for notification

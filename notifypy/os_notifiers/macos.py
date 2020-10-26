@@ -10,7 +10,7 @@ from ._base import BaseNotifier
 
 class MacOSNotifier(BaseNotifier):
     def __init__(self, **kwargs):
-        """ Main macOS Notification System, supplied by a custom-made notificator app. 
+        """Main macOS Notification System, supplied by a custom-made notificator app.
         Icon Support is **not** supported. You'll need to create your own bundle for that.
         """
 

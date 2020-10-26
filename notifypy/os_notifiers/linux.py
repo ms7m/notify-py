@@ -8,12 +8,12 @@ from ._base import BaseNotifier
 
 class LinuxNotifier(BaseNotifier):
     def __init__(self):
-        """ Main Linux Notification Class 
-        
-            This uses libnotify's tool of notfiy-send. 
-            I'll add support for (and probably use as first choice) sending 
-            through dbus.
-            
+        """Main Linux Notification Class
+
+        This uses libnotify's tool of notfiy-send.
+        I'll add support for (and probably use as first choice) sending
+        through dbus.
+
         """
         call_find_notify_send = self._find_installed_notify_send()
 

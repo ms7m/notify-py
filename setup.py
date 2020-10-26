@@ -4,14 +4,14 @@ import sys
 
 from setuptools import Command, find_packages, setup
 
-import notifypy
+# import notifypy
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="notify_py",
-    version=notifypy.__version__,
+    version="0.2.4",
     author="Mustafa Mohamed",
     author_email="ms7mohamed@gmail.com",
     description="Cross-platform desktop notification library for Python",
@@ -28,5 +28,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     include_package_data=True,
-    install_requires=["loguru==0.4.1"],
+    install_requires=["loguru"],
 )

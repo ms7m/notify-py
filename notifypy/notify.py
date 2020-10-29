@@ -40,22 +40,31 @@ class Notify:
         """
 
         if not enable_logging:
-            logger.disable("notifypy")
+            check_if_enable_logging_env = os.getenv("notifypyEnableLogging")
+            if check_if_enable_logging_env:
+                logger.warning(f"System environment variable for enabling logging is active. Ignoring parameter passed. ({enable_logging})")
+            else:
+                logger.disable("notifypy")
         else:
             logger.info("Logging is enabled.")
 
-        if kwargs.get("override_detected_notification_system"):
+
+        if kwargs.get("use_custom_notifier"):
             """
             This optional kwarg allows for the use of overriding the detected notifier.
             Use at your own risk
             """
-            selected_override = kwargs.get("override_detected_notification_system")
+            selected_override = kwargs.get("use_custom_notifier")
             if issubclass(selected_override, BaseNotifier):
                 self._notifier_detect = selected_override
             else:
                 raise ValueError("Overrided Notifier must inherit from BaseNotifier.")
         else:
-            self._notifier_detect = self._selected_notification_system()
+            check_if_user_override_detection = kwargs.get("override_detected_notification_system")
+            if check_if_user_override_detection:
+                self._notifier_detect = self._selected_notification_system(**kwargs)
+            else:
+                self._notifier_detect = self._selected_notification_system()
 
         # Initialize.
         self._notifier = self._notifier_detect(**kwargs)
@@ -81,8 +90,14 @@ class Notify:
             self._notification_audio = None
 
     @staticmethod
-    def _selected_notification_system():
-        selected_platform = platform.system()
+    def _selected_notification_system(override_detection:str=False, override_windows_version_detection: bool = False):
+
+        if override_detection:
+            logger.info(f"chosen to override to {override_detection}.")
+            selected_platform = override_detection
+        else:
+            selected_platform = platform.system()
+
         if selected_platform == "Linux":
 
             return LinuxNotifier
@@ -92,6 +107,10 @@ class Notify:
         elif selected_platform == "Windows":
             if platform.release() == "10":
                 return WindowsNotifier
+
+            if override_windows_version_detection == True:
+                return WindowsNotifier
+
             raise UnsupportedPlatform(
                 f"This version of Windows ({platform.release()}) is not supported."
             )

@@ -116,7 +116,9 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
             ) as ps1_file:
                 ps1_file.write(generated_file)
             # exceute the file
-            subprocess.call(
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            subprocess.Popen(
                 [
                     "Powershell",
                     "-ExecutionPolicy",
@@ -125,5 +127,6 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
                     f"{generated_uuid_file}.ps1",
                 ],
                 cwd=temp_dir,
-            )
+                startupinfo=startupinfo,
+            ).wait()
         return True

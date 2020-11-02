@@ -1,4 +1,5 @@
 import io
+from notifypy.cli import entry
 import os
 import sys
 
@@ -11,7 +12,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="notify_py",
-    version="0.2.4",
+    version="0.3.0",
     author="Mustafa Mohamed",
     author_email="ms7mohamed@gmail.com",
     description="Cross-platform desktop notification library for Python",
@@ -27,6 +28,11 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    entry_points={
+        "console_scripts": [
+            "notifypy = notifypy.cli:entry"
+        ]
+    },
     include_package_data=True,
     install_requires=["loguru"],
 )

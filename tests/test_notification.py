@@ -111,7 +111,7 @@ def test_custom_notification():
         def __init__(self, **kwargs):
             pass
 
-    n = notifypy.Notify(override_detected_notification_system=CustomNotificator)
+    n = notifypy.Notify(use_custom_notifier=CustomNotificator)
     assert n._notifier_detect == CustomNotificator
 
 
@@ -120,7 +120,7 @@ def test_invalid_custom_notification():
         pass
 
     with pytest.raises(ValueError):
-        notifypy.Notify(override_detected_notification_system=CustomNotificator)
+        notifypy.Notify(use_custom_notifier=CustomNotificator)
 
 
 def test_unexposed_inherit_baseNotifier():

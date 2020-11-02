@@ -42,12 +42,13 @@ class Notify:
         if not enable_logging:
             check_if_enable_logging_env = os.getenv("notifypyEnableLogging")
             if check_if_enable_logging_env:
-                logger.warning(f"System environment variable for enabling logging is active. Ignoring parameter passed. ({enable_logging})")
+                logger.warning(
+                    f"System environment variable for enabling logging is active. Ignoring parameter passed. ({enable_logging})"
+                )
             else:
                 logger.disable("notifypy")
         else:
             logger.info("Logging is enabled.")
-
 
         if kwargs.get("use_custom_notifier"):
             """
@@ -60,7 +61,9 @@ class Notify:
             else:
                 raise ValueError("Overrided Notifier must inherit from BaseNotifier.")
         else:
-            check_if_user_override_detection = kwargs.get("override_detected_notification_system")
+            check_if_user_override_detection = kwargs.get(
+                "override_detected_notification_system"
+            )
             if check_if_user_override_detection:
                 self._notifier_detect = self._selected_notification_system(**kwargs)
             else:
@@ -90,7 +93,10 @@ class Notify:
             self._notification_audio = None
 
     @staticmethod
-    def _selected_notification_system(override_detection:str=False, override_windows_version_detection: bool = False):
+    def _selected_notification_system(
+        override_detection: str = False,
+        override_windows_version_detection: bool = False,
+    ):
 
         if override_detection:
             logger.info(f"chosen to override to {override_detection}.")

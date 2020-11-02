@@ -57,6 +57,7 @@ from notifypy import Notify
 notification = Notify()
 notification.title = "Cool Title"
 notification.message = "Even cooler message."
+notification.send()
 ```
 
 **Send Notification With Icon**
@@ -134,6 +135,9 @@ def your_function():
 
 ### Contributors
 - [Leterax](https://github.com/Leterax)
+- [jnoortheen](https://github.com/jnoortheen)
+- [dynobo](https://github.com/dynobo)
+
 ***
 ### Inspiration and Special Thanks
 
@@ -148,7 +152,9 @@ def your_function():
 ***
 
 # Contributing
-Contributions are welcome. 
+Contributions are welcome!
 
+- Please base your changes on the latest development branch and open a PR to that branch. PR will not be accepted to the master branch.
 - Tests are ran against all platforms.
 - Black formatting is required.
+- Go ahead and add your name to Contributors if you submit a PR :)

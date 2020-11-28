@@ -113,7 +113,7 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         with tempfile.TemporaryDirectory() as temp_dir:
             generated_uuid_file = str(uuid.uuid4())
             with codecs.open(
-                f"{temp_dir}/{generated_uuid_file}.ps1", "w", 'utf_8_sig'
+                f"{temp_dir}/{generated_uuid_file}.ps1", "w", "utf_8_sig"
             ) as ps1_file:
                 ps1_file.write(generated_file)
             # exceute the file

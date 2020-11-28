@@ -12,7 +12,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="notify_py",
-    version="0.3.0",
+    version="0.3.1",
     author="Mustafa Mohamed",
     author_email="ms7mohamed@gmail.com",
     description="Cross-platform desktop notification library for Python",

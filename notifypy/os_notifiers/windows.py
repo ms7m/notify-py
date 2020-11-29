@@ -4,6 +4,7 @@ import subprocess
 from xml.etree import ElementTree
 import tempfile
 import uuid
+import codecs
 
 from loguru import logger
 from ._base import BaseNotifier
@@ -111,8 +112,8 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         # open the temporary directory
         with tempfile.TemporaryDirectory() as temp_dir:
             generated_uuid_file = str(uuid.uuid4())
-            with open(
-                f"{temp_dir}/{generated_uuid_file}.ps1", "w", encoding="utf-8"
+            with codecs.open(
+                f"{temp_dir}/{generated_uuid_file}.ps1", "w", "utf_8_sig"
             ) as ps1_file:
                 ps1_file.write(generated_file)
             # exceute the file

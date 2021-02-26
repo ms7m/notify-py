@@ -75,3 +75,9 @@ class InvalidMacOSNotificator(BaseNotifyPyException):
 
     def __repr__(self):
         return f"The provided notificator is invalid. Please read the documentation for more information."
+
+
+class LinuxDbusException(Exception):
+    """ This error is raised when a connection with dbus is interrupted or is unable to be established """
+
+    pass

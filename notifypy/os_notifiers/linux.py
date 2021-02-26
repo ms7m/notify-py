@@ -169,12 +169,12 @@ class LinuxNotifier(BaseNotifier):
             logger.exception("issue with opening DBUS connection!")
             if self._fallback_to_libnotify == True:
                 logger.debug("falling back to libnotify!")
-                LinuxNotifier().send_notification(
+                LinuxNotifierLibNotify().send_notification(
                     notification_title,
                     notification_subtitle,
                     notification_icon,
                     notification_audio,
-                    kwargs,
+                    **kwargs,
                 )
 
         try:
@@ -206,12 +206,12 @@ class LinuxNotifier(BaseNotifier):
             logger.exception("issue with sending through dbus!")
             if self._fallback_to_libnotify == True:
                 logger.debug("falling back to libnotify!")
-                return LinuxNotifier().send_notification(
+                return LinuxNotifierLibNotify().send_notification(
                     notification_title,
                     notification_subtitle,
                     notification_icon,
                     notification_audio,
-                    kwargs,
+                    **kwargs,
                 )
             return False
         finally:

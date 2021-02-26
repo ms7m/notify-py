@@ -105,7 +105,7 @@ class Notify:
         if selected_platform == "Linux":
             from .os_notifiers.linux import USE_LEGACY
 
-            if USE_LEGACY == True:
+            if USE_LEGACY == False:
                 from .os_notifiers.linux import LinuxNotifier
 
                 return LinuxNotifier

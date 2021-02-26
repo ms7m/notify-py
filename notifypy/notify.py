@@ -14,8 +14,6 @@ from .exceptions import (
     InvalidAudioFormat,
 )
 
-from .os_notifiers import LinuxNotifier, MacOSNotifier, WindowsNotifier
-
 from .os_notifiers._base import BaseNotifier
 
 
@@ -105,16 +103,29 @@ class Notify:
             selected_platform = platform.system()
 
         if selected_platform == "Linux":
+            from .os_notifiers.linux import USE_LEGACY
 
-            return LinuxNotifier
+            if USE_LEGACY == True:
+                from .os_notifiers.linux import LinuxNotifier
+
+                return LinuxNotifier
+            else:
+                from .os_notifiers.linux import LinuxNotifierLibNotify
+
+                return LinuxNotifierLibNotify
         elif selected_platform == "Darwin":
+            from .os_notifiers.macos import MacOSNotifier
 
             return MacOSNotifier
         elif selected_platform == "Windows":
             if platform.release() == "10":
+                from .os_notifiers.windows import WindowsNotifier
+
                 return WindowsNotifier
 
             if override_windows_version_detection == True:
+                from .os_notifiers.windows import WindowsNotifier
+
                 return WindowsNotifier
 
             raise UnsupportedPlatform(

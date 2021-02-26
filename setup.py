@@ -28,11 +28,10 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    entry_points={
-        "console_scripts": [
-            "notifypy = notifypy.cli:entry"
-        ]
-    },
+    entry_points={"console_scripts": ["notifypy = notifypy.cli:entry"]},
     include_package_data=True,
-    install_requires=["loguru"],
+    install_requires=[
+        "loguru",
+    ],
+    extras_require={"dbus": ["jeepney; platform_system='Linux'"]},
 )

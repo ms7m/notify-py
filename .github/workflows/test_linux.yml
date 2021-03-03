@@ -15,26 +15,30 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
-    - name: Install dependencies
-      run: |
-        pip install loguru
-        sudo apt-get install libnotify-bin
-        sudo apt-get install alsa
-    - name: Lint with pylint
-      run: |
-        pip install pylint
-        # stop the build if there are Python syntax errors or undefined names
-        pylint --errors-only notifypy/
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        python -m pytest tests/
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          pip install loguru
+          sudo apt-get install libnotify-bin
+          sudo apt-get install alsa
+      - name: Lint with pylint
+        run: |
+          pip install pylint
+          # stop the build if there are Python syntax errors or undefined names
+          pylint --errors-only notifypy/
+      - name: Test with pytest (Linux dbus)
+        run: |
+          pip install pytest
+          python -m pytest tests/
+      - name: Test with pytest (Linux dbus)
+        run: |
+          pip install pytest
+          pip uninstall jeepney
+          python -m pytest tests/

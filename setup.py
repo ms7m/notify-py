@@ -30,8 +30,5 @@ setup(
     ],
     entry_points={"console_scripts": ["notifypy = notifypy.cli:entry"]},
     include_package_data=True,
-    install_requires=[
-        "loguru",
-    ],
-    extras_require={"dbus": ["jeepney; platform_system='Linux'"]},
+    install_requires=["loguru", "jeepney; platform_system='Linux'"],
 )

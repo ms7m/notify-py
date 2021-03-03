@@ -25,7 +25,7 @@ jobs:
           python-version: 3.7
       - name: Install dependencies
         run: |
-          pip install loguru
+          pip install loguru jeepney
           sudo apt-get install libnotify-bin
           sudo apt-get install alsa
       - name: Lint with pylint
@@ -37,7 +37,7 @@ jobs:
         run: |
           pip install pytest
           python -m pytest tests/
-      - name: Test with pytest (Linux dbus)
+      - name: Test with pytest (Linux Libnotify)
         run: |
           pip install pytest
           pip uninstall jeepney

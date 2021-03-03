@@ -198,7 +198,7 @@ class LinuxNotifier(BaseNotifier):
                 ),
             )
             reply = _attempt_to_open_dbus_connection.send_and_get_reply(
-                create_notification
+                create_notification, timeout=2
             )
             logger.debug(f"confirmed notification sent! id: {reply}")
             return True

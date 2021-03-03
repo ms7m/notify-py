@@ -12,7 +12,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="notify_py",
-    version="0.3.1",
+    version="0.3.2",
     author="Mustafa Mohamed",
     author_email="ms7mohamed@gmail.com",
     description="Cross-platform desktop notification library for Python",
@@ -30,5 +30,5 @@ setup(
     ],
     entry_points={"console_scripts": ["notifypy = notifypy.cli:entry"]},
     include_package_data=True,
-    install_requires=["loguru", "jeepney; platform_system='Linux'"],
+    install_requires=["loguru", "jeepney ; platform_system=='Linux'"],
 )

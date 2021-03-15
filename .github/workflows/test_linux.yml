@@ -38,5 +38,5 @@ jobs:
           dbus-run-session -- python -m pytest tests/
       - name: Test with pytest (Linux Libnotify)
         run: |
-          pip uninstall jeepney
+          pip uninstall jeepney -y
           python -m pytest tests/

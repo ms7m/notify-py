@@ -93,6 +93,12 @@ class LinuxNotifierLibNotify(BaseNotifier):
             if notification_icon:
                 generated_command.append(f"--icon={shlex.quote(notification_icon)}")
 
+            if kwargs.get("application_name"):
+                generated_command.append(
+                    f"--app-name={shlex.quote(kwargs.get('application_name'))}"
+                )
+
+            logger.debug(f"Generated command: {generated_command}")
             if notification_audio:
 
                 if self._aplay_binary == False:

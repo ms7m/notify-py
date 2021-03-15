@@ -35,7 +35,7 @@ jobs:
           pylint --errors-only notifypy/
       - name: Test with pytest (Linux dbus)
         run: |
-          python -m pytest tests/
+          dbus-run-session -- python -m pytest tests/
       - name: Test with pytest (Linux Libnotify)
         run: |
           pip uninstall jeepney

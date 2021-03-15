@@ -201,7 +201,9 @@ class LinuxNotifier(BaseNotifier):
                 create_notification, timeout=2
             )
             logger.debug(f"confirmed notification sent! id: {reply}")
+            _attempt_to_open_dbus_connection.close()
             return True
+
         except Exception:
             logger.exception("issue with sending through dbus!")
             if self._fallback_to_libnotify == True:

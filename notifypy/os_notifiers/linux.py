@@ -8,9 +8,16 @@ from ._base import BaseNotifier
 try:
     from jeepney import DBusAddress, new_method_call
     from jeepney.io.blocking import open_dbus_connection
+    import os
 
-    logger.info("using dbus for linux!")
-    USE_LEGACY = False
+    # check if dbus is available
+    _dbus_address = os.getenv("DBUS_SESSION_BUS_ADDRESS")
+    if _dbus_address:
+        logger.info("Jeepney and Dbus is available. Using DBUS for notifications..")
+        USE_LEGACY = False
+    else:
+        logger.error("Jeepney is available but DBUS is not. Using legacy notification instead.")
+        USE_LEGACY = True
 except ImportError:
     logger.error("DBUS suppport not installed. Using libnotify for notifications!")
     USE_LEGACY = True
@@ -175,13 +182,16 @@ class LinuxNotifier(BaseNotifier):
             logger.exception("issue with opening DBUS connection!")
             if self._fallback_to_libnotify == True:
                 logger.debug("falling back to libnotify!")
-                LinuxNotifierLibNotify().send_notification(
+                return LinuxNotifierLibNotify().send_notification(
                     notification_title,
                     notification_subtitle,
                     notification_icon,
                     notification_audio,
                     **kwargs,
                 )
+            else:
+                logger.exception("there was an exception trying to open the dbus connection. fallback was not enabled, therefore this will return False.")
+                return False
 
         try:
             notification_title = " " if notification_title == "" else notification_title
@@ -222,5 +232,4 @@ class LinuxNotifier(BaseNotifier):
                     **kwargs,
                 )
             return False
-        finally:
-            _attempt_to_open_dbus_connection.close()
+

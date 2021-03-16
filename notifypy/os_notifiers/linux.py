@@ -16,7 +16,9 @@ try:
         logger.info("Jeepney and Dbus is available. Using DBUS for notifications..")
         USE_LEGACY = False
     else:
-        logger.error("Jeepney is available but DBUS is not. Using legacy notification instead.")
+        logger.error(
+            "Jeepney is available but DBUS is not. Using legacy notification instead."
+        )
         USE_LEGACY = True
 except ImportError:
     logger.error("DBUS suppport not installed. Using libnotify for notifications!")
@@ -190,7 +192,9 @@ class LinuxNotifier(BaseNotifier):
                     **kwargs,
                 )
             else:
-                logger.exception("there was an exception trying to open the dbus connection. fallback was not enabled, therefore this will return False.")
+                logger.exception(
+                    "there was an exception trying to open the dbus connection. fallback was not enabled, therefore this will return False."
+                )
                 return False
 
         try:
@@ -232,4 +236,3 @@ class LinuxNotifier(BaseNotifier):
                     **kwargs,
                 )
             return False
-

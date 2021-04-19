@@ -21,7 +21,7 @@ setup(
     url="https://github.com/ms7m/notify-py",
     python_requires=">=3.6.0",
     packages=find_packages(
-        exclude=["testing", "*.testing", "*.testing.*", "testing.*"]
+        exclude=["testing", "*.testing", "*.testing.*", "testing.*", "tests"]
     ),
     classifiers=[
         "Programming Language :: Python :: 3",

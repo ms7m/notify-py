@@ -102,11 +102,14 @@ $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
         )
 
         if notification_audio:
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
             subprocess.Popen(
                 [
                     "Powershell",
                     f'(New-Object Media.SoundPlayer "{notification_audio}").playsync()',
-                ]
+                ],
+                startupinfo=startupinfo,
             )
 
         # open the temporary directory

@@ -8,12 +8,12 @@ from notifypy import BaseNotifier
 
 
 def test_normal_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     assert n.send() == True
 
 
 def test_multiline_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.message = """
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
 sed do eiusmod tempor incididunt ut labore et dolore magna 
@@ -27,66 +27,66 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 
 def test_notification_with_emoji():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.title = "🐐"
     n.message = "also known as Kanye West"
 
 
 def test_notification_with_double_quotes():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.title = '" Yes "Yes"'
     assert n.send() == True
 
 
 def test_notification_with_special_chars():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.message = '"""""; """ ;;# ##>>> <<>>< </>'
     assert n.send() == True
 
 
 def test_blank_message_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.message = ""
     assert n.send() == True
 
 
 def test_blank_title_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.title = ""
     assert n.send() == True
 
 
 def test_rtl_language_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.title = "مرحبا كيف الحال؟"
     assert n.send() == True
 
 
 def test_blocking_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     assert n.send(block=True) == True
 
 
 def test_non_blocking_notification():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     thread_notify = n.send(block=False)
     assert thread_notify.wait()
 
 
 def test_custom_audio():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     n.audio = "notifypy/example_notification_sound.wav"
     assert n.send() == True
 
 
 def test_custom_audio_no_file():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     with pytest.raises(notifypy.exceptions.InvalidAudioFormat):
         n.audio = "not a file!"
 
 
 def test_non_existant_icon():
-    n = notifypy.Notify()
+    n = notifypy.Notify(enable_logging=True)
     with pytest.raises(notifypy.exceptions.InvalidIconPath):
         n.icon = "ttt"
 

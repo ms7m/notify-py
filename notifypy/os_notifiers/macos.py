@@ -15,7 +15,7 @@ class MacOSNotifier(BaseNotifier):
         """
 
         if kwargs.get("custom_mac_notificator"):
-            """ This optional kwarg exists for the use of using a custom (made) notificator without building a .whl """
+            """This optional kwarg exists for the use of using a custom (made) notificator without building a .whl"""
             selected_custom_notificator = kwargs.get("custom_mac_notificator")
             if (
                 pathlib.Path(selected_custom_notificator)
@@ -58,7 +58,7 @@ class MacOSNotifier(BaseNotifier):
 
     @staticmethod
     def _find_bundled_notificator():
-        """ Gets the bundled Notifcator """
+        """Gets the bundled Notifcator"""
         try:
             current_bundled = os.path.join(
                 os.path.dirname(__file__),
@@ -73,7 +73,7 @@ class MacOSNotifier(BaseNotifier):
 
     @staticmethod
     def _find_installed_afplay():
-        """ Function to find the path for afplay """
+        """Function to find the path for afplay"""
         try:
             run_which_for_aplay = subprocess.check_output(["which", "afplay"])
             return run_which_for_aplay.decode("utf-8")

@@ -2,11 +2,11 @@
 
 
 class BaseNotifyPyException(BaseException):
-    """ Base Exception to be Inheritied """
+    """Base Exception to be Inheritied"""
 
 
 class UnsupportedPlatform(BaseNotifyPyException):
-    """ Unsupported Platform, notify-py might not work as expected """
+    """Unsupported Platform, notify-py might not work as expected"""
 
     def __init__(self, platform):
         self.platform = platform
@@ -19,7 +19,7 @@ class UnsupportedPlatform(BaseNotifyPyException):
 
 
 class InvalidAudioPath(BaseNotifyPyException):
-    """ Audio path provided is invalid."""
+    """Audio path provided is invalid."""
 
     def __repr__(self):
         return f"Unable to find audio path. Please check if it exists."
@@ -29,7 +29,7 @@ class InvalidAudioPath(BaseNotifyPyException):
 
 
 class InvalidAudioFormat(BaseNotifyPyException):
-    """ The custom audio provided is not a supported file """
+    """The custom audio provided is not a supported file"""
 
     def __repr__(self):
         return f"Only .wav files are supported."
@@ -39,7 +39,7 @@ class InvalidAudioFormat(BaseNotifyPyException):
 
 
 class InvalidIconPath(BaseNotifyPyException):
-    """ Icon Path Provided is Invalid """
+    """Icon Path Provided is Invalid"""
 
     def __repr__(self):
         return f"Unable to find icon path. Please check if it exists."
@@ -49,13 +49,13 @@ class InvalidIconPath(BaseNotifyPyException):
 
 
 class NotificationFailure(BaseNotifyPyException):
-    """ Overall function failed """
+    """Overall function failed"""
 
     pass
 
 
 class BinaryNotFound(BaseNotifyPyException):
-    """" A specified binary requirement was not found """
+    """ " A specified binary requirement was not found"""
 
     def __init__(self, binary):
         self.binary = binary
@@ -68,7 +68,7 @@ class BinaryNotFound(BaseNotifyPyException):
 
 
 class InvalidMacOSNotificator(BaseNotifyPyException):
-    """ The provided notificator is invalid. """
+    """The provided notificator is invalid."""
 
     def __str__(self):
         return f"The provided notificator is invalid. Please read the documentation for more information."
@@ -78,6 +78,6 @@ class InvalidMacOSNotificator(BaseNotifyPyException):
 
 
 class LinuxDbusException(Exception):
-    """ This error is raised when a connection with dbus is interrupted or is unable to be established """
+    """This error is raised when a connection with dbus is interrupted or is unable to be established"""
 
     pass

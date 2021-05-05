@@ -60,7 +60,7 @@ def _enable_argument_parser() -> argparse.ArgumentParser:
 
 
 def entry():
-    """ Entrypoint for CLI (Notify-py) """
+    """Entrypoint for CLI (Notify-py)"""
     parser = _enable_argument_parser()
     arguments_recieved = parser.parse_args()
 

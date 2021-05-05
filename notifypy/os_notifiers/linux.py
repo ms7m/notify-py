@@ -52,7 +52,7 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
     @staticmethod
     def _find_installed_aplay():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_aplay = subprocess.check_output(["which", "aplay"])
             return run_which_for_aplay.decode("utf-8")
@@ -65,7 +65,7 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
     @staticmethod
     def _find_installed_notify_send():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_notify_send = subprocess.check_output(
                 ["which", "notify-send"]
@@ -158,7 +158,7 @@ class LinuxNotifier(BaseNotifier):
 
     @staticmethod
     def _find_installed_aplay():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_aplay = subprocess.check_output(["which", "aplay"])
             return run_which_for_aplay.decode("utf-8")

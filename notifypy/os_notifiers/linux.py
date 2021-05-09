@@ -52,7 +52,7 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
     @staticmethod
     def _find_installed_aplay():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_aplay = subprocess.check_output(["which", "aplay"])
             return run_which_for_aplay.decode("utf-8")
@@ -65,7 +65,7 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
     @staticmethod
     def _find_installed_notify_send():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_notify_send = subprocess.check_output(
                 ["which", "notify-send"]
@@ -158,7 +158,7 @@ class LinuxNotifier(BaseNotifier):
 
     @staticmethod
     def _find_installed_aplay():
-        """ Function to find the path for notify-send """
+        """Function to find the path for notify-send"""
         try:
             run_which_for_aplay = subprocess.check_output(["which", "aplay"])
             return run_which_for_aplay.decode("utf-8")
@@ -202,6 +202,18 @@ class LinuxNotifier(BaseNotifier):
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
             )
+            if notification_audio:
+                # TODO: https://specifications.freedesktop.org/notification-spec/latest/ar01s09.html
+                # use sound param instead of relying on alsa?
+
+                if self._aplay_binary == False:
+                    raise BinaryNotFound("aplay (Alsa)")
+
+                subprocess.Popen(
+                    [self._aplay_binary.strip(), notification_audio],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
             create_notification = new_method_call(
                 self._dbus_notifications,
                 "Notify",

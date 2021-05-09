@@ -25,6 +25,7 @@ jobs:
           python-version: 3.7
       - name: Install dependencies
         run: |
+          sudo apt-get update
           pip install loguru jeepney pytest
           sudo apt-get install libnotify-bin
           sudo apt-get install alsa

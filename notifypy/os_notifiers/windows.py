@@ -12,7 +12,7 @@ from ._base import BaseNotifier
 
 class WindowsNotifier(BaseNotifier):
     def __init__(self):
-        """ Main Notification System for Windows. Basically ported from go-toast/toast """
+        """Main Notification System for Windows. Basically ported from go-toast/toast"""
 
         # Create the base
         self._top_ps1_script = f"""

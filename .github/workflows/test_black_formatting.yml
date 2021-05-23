@@ -6,25 +6,22 @@ name: Test For Black Formatting
 on:
   push:
     branches:
-      - master
       - dev
   pull_request:
     branches:
-      - master
       - dev
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
-    - name: Test Black Formatting
-      run: |
-        pip install black
-        python -m black --check notifypy/
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Test Black Formatting
+        run: |
+          pip install black
+          python -m black --check notifypy/

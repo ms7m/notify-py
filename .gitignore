@@ -144,3 +144,4 @@ cython_debug/
 
 # PyCharm
 .idea/
+dist/*

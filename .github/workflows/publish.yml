@@ -1,0 +1,21 @@
+name: Build Wheels + Publish to PyPi
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python to Build Wheel
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Build and publish to PyPi
+        uses: JRubics/poetry-publish@v1
+        with:
+          pypi_token: ${{ secrets.PYPI_TOKEN }}
+          ignore_dev_requirements: "yes"

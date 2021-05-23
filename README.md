@@ -32,7 +32,7 @@ You can read the docs on this Git's Wiki, or [here](https://ms7m.github.io/notif
 - macOS 10 >=10.10
 - Linux (libnotify)
 
-No dependencies are required other than loguru.
+No dependencies are required other than loguru & jeepney (Only for linux/DBUS).
 
 ***
 

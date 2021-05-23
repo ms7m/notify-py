@@ -1,1 +1,2 @@
 loguru
+jeepney ; platform_system=='Linux'

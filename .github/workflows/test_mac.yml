@@ -6,33 +6,31 @@ name: Test macOS
 on:
   push:
     branches:
-      - master
       - dev
   pull_request:
     branches:
-      - master
       - dev
 
 jobs:
   build:
-
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.7
-    - name: Install dependencies
-      run: |
-        pip install loguru
-    - name: Lint with pylint
-      run: |
-        pip install pylint
-        # stop the build if there are Python syntax errors or undefined names
-        pylint --errors-only notifypy/
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        python -m pytest tests/
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install dependencies
+        run: |
+          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+          exec $SHELL
+      - name: Lint with pylint
+        run: |
+          pip install pylint
+          # stop the build if there are Python syntax errors or undefined names
+          poetry run pylint --errors-only notifypy/
+      - name: Test with pytest
+        run: |
+          pip install pytest
+          poetry run pytest tests/

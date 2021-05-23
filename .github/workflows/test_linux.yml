@@ -27,8 +27,10 @@ jobs:
           sudo apt-get install libnotify-bin
           sudo apt-get install alsa
           sudo apt-get install curl
-      - name: Install Poetry
-        uses: snok/install-poetry@v1.1.6
+      - name: Install dependencies
+        run: |
+          pipx install poetry
+          poetry install
       - name: Lint with pylint
         run: |
           # stop the build if there are Python syntax errors or undefined names

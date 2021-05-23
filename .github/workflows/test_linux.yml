@@ -21,16 +21,14 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
-      - name: Install dependencies
+      - name: Install OS dependencies
         run: |
           sudo apt-get update
-          pip install loguru jeepney pytest
           sudo apt-get install libnotify-bin
           sudo apt-get install alsa
           sudo apt-get install curl
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-          exec $SHELL
-          poetry install
+      - name: Install Poetry
+        uses: snok/install-poetry@v1.1.6
       - name: Lint with pylint
         run: |
           # stop the build if there are Python syntax errors or undefined names

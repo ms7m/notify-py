@@ -27,10 +27,8 @@ jobs:
           poetry install
       - name: Lint with pylint
         run: |
-          pip install pylint
           # stop the build if there are Python syntax errors or undefined names
           poetry run pylint --errors-only notifypy/
       - name: Test with pytest
         run: |
-          pip install pytest
           poetry run pytest tests/

@@ -38,6 +38,7 @@ typed-ast = "1.4.1"
 typing-extensions = "3.7.4.3"
 win32-setctime = "1.0.3"
 zipp = "3.4.0"
+pylint = "^2.8.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

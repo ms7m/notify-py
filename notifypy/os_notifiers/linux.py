@@ -202,6 +202,18 @@ class LinuxNotifier(BaseNotifier):
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
             )
+            if notification_audio:
+                # TODO: https://specifications.freedesktop.org/notification-spec/latest/ar01s09.html
+                # use sound param instead of relying on alsa?
+
+                if self._aplay_binary == False:
+                    raise BinaryNotFound("aplay (Alsa)")
+
+                subprocess.Popen(
+                    [self._aplay_binary.strip(), notification_audio],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
             create_notification = new_method_call(
                 self._dbus_notifications,
                 "Notify",

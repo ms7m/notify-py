@@ -6,11 +6,9 @@ name: Test Linux
 on:
   push:
     branches:
-      - master
       - dev
   pull_request:
     branches:
-      - master
       - dev
 
 jobs:
@@ -23,20 +21,27 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
-      - name: Install dependencies
+      - name: Install OS dependencies
         run: |
-          pip install loguru jeepney pytest
+          sudo apt-get update
           sudo apt-get install libnotify-bin
           sudo apt-get install alsa
+          sudo apt-get install curl
+      - name: Install dependencies
+        run: |
+          pipx install poetry
+          poetry install
       - name: Lint with pylint
         run: |
-          pip install pylint
           # stop the build if there are Python syntax errors or undefined names
-          pylint --errors-only notifypy/
+          poetry run pylint --errors-only notifypy/
       - name: Test with pytest (Linux dbus)
         run: |
-          dbus-run-session -- python -m pytest tests/
+          dbus-run-session -- poetry run pytest tests/
       - name: Test with pytest (Linux Libnotify)
         run: |
           pip uninstall jeepney -y
-          python -m pytest tests/
+          poetry run pytest tests/
+      - name: Test building package
+        run: |
+          poetry build

@@ -1,14 +1,16 @@
 [tool.poetry]
-name = "notify-py"
+name = "notify_py"
 version = "0.3.3"
 description = "Cross-platform desktop notification library for Python"
 authors = ["Mustafa Mohamed <mustafa@ms7m.me>"]
-repository = "https://github.com/ms7m/dispike"
+repository = "https://github.com/ms7m/notify-py"
 readme = "README.md"
 license = "MIT"
-documentation = "https://github.com/ms7m/dispike"
+documentation = "https://github.com/ms7m/notify-py"
 include = ["notifypy/py-logo.png", "notifypy/example_notification_sound.wav", "notifypy/os_notifiers/binaries/*"]
-
+packages = [
+    { include = "notifypy" },
+]
 [tool.poetry.dependencies]
 python = "^3.6"
 loguru = "^0.5.3"

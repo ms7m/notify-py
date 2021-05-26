@@ -21,7 +21,6 @@
   </p>
 </div>
 
-
 ## Docs
 
 You can read the docs on this Git's Wiki, or [here](https://ms7m.github.io/notify-py/)
@@ -34,9 +33,7 @@ You can read the docs on this Git's Wiki, or [here](https://ms7m.github.io/notif
 
 No dependencies are required other than loguru & jeepney (Only for linux/DBUS).
 
-***
-
-
+---
 
 ## Install
 
@@ -44,12 +41,12 @@ No dependencies are required other than loguru & jeepney (Only for linux/DBUS).
 pip install notify-py
 ```
 
-***
+---
 
 ## Usage
 
-
 **Send Simple Notification**
+
 ```python
 
 from notifypy import Notify
@@ -61,6 +58,7 @@ notification.send()
 ```
 
 **Send Notification With Icon**
+
 ```python
 
 from notifypy import Notify
@@ -74,6 +72,7 @@ notification.send()
 ```
 
 **Send Notification With Sound**
+
 ```python
 
 from notifypy import Notify
@@ -88,6 +87,7 @@ notification.send()
 ```
 
 **Sending Notifications without blocking**
+
 ```python
 
 from notifypy import Notify
@@ -97,8 +97,8 @@ notification.send(block=False)
 
 ```
 
-
 **Sending with Default Notification Titles/Messages/Icons**
+
 ```python
 
 from notifypy import Notify
@@ -116,29 +116,30 @@ def your_function():
   notification.send()
 ```
 
-***
+---
 
-## Important Caveats 
+## Important Caveats
 
-- As it stands (May 18, 2020), this is simply a notification service. There is *no* support for embedding custom actions (buttons, dialogs) regardless of platform. Other then telling you if the shell command was sent, there is also no confirmation on user action on the notification. 
+- As it stands (May 18, 2020), this is simply a notification service. There is _no_ support for embedding custom actions (buttons, dialogs) regardless of platform. Other then telling you if the shell command was sent, there is also no confirmation on user action on the notification.
 
-- macOS does **not** support custom icons on the fly.. You will need to bundle a customized version of the notifier embedded with your custom icon. 
+- macOS does **not** support custom icons on the fly.. You will need to bundle a customized version of the notifier embedded with your custom icon.
 
-***
+---
 
 ### Windows Specific.
 
 - No support for balloon tips (pre Win10).. This will be changed in the future.
 
-***
-
+---
 
 ### Contributors
+
 - [Leterax](https://github.com/Leterax)
 - [jnoortheen](https://github.com/jnoortheen)
 - [dynobo](https://github.com/dynobo)
 
-***
+---
+
 ### Inspiration and Special Thanks
 
 - https://github.com/go-toast/toast - Ported their Windows 10 toast notification to Python.
@@ -149,12 +150,24 @@ def your_function():
 
 - https://github.com/mikaelbr/node-notifier
 
-***
+---
 
 # Contributing
+
 Contributions are welcome!
 
-- Please base your changes on the latest development branch and open a PR to that branch. PR will not be accepted to the master branch.
-- Tests are ran against all platforms.
-- Black formatting is required.
-- Go ahead and add your name to Contributors if you submit a PR :)
+Please base your changes on the latest development branch and open a PR to that branch. PR will not be accepted to the master branch. Tests are ran against all platforms.
+
+### Setting Up Environment
+
+- Install [Poetry](https://python-poetry.org/)
+  - `poetry install`
+- Add patches/new features/bug fiexes
+- Run tests
+  - `poetry run pytest tests/*`
+- Run lints
+  - `poetry run pylint --errors-only notifypy/`
+- Run Black Formatting
+  - `poetry run black notifypy`
+- Open PR to `dev` branch.
+- Add your name to contributors list if you wish!

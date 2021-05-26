@@ -1,0 +1,3 @@
+include notifypy/py-logo.png
+include notifypy/example_notification_sound.wav
+recursive-include notifypy/os_notifiers/binaries *

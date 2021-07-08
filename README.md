@@ -118,6 +118,16 @@ def your_function():
 
 ---
 
+# CLI
+A CLI is available when you install notify-py
+
+```bash
+notify-py --title --message --applicationName --iconPath --soundPath
+```
+You may need to add ``python3 -m`` to the beginning.
+
+---
+
 ## Important Caveats
 
 - As it stands (May 18, 2020), this is simply a notification service. There is _no_ support for embedding custom actions (buttons, dialogs) regardless of platform. Other then telling you if the shell command was sent, there is also no confirmation on user action on the notification.

@@ -8,10 +8,20 @@ on:
     branches:
       - dev
       - master
+    paths:
+      - notifypy/**
+      - tests/**
+      - pyproject.toml
+      - poetry.lock
   pull_request:
     branches:
       - dev
       - master
+    paths:
+      - notifypy/**
+      - tests/**
+      - pyproject.toml
+      - poetry.lock
 
 jobs:
   build:

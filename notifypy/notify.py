@@ -105,26 +105,7 @@ class Notify:
         else:
             selected_platform = platform.system()
 
-        if selected_platform == "Linux":
-
-            if linux_use_legacy_notifier:
-                from .os_notifiers.linux import LinuxNotifierLibNotify
-
-                return LinuxNotifierLibNotify
-            else:
-
-                from .os_notifiers.linux import NOTIFY
-
-                if NOTIFY:
-                    from .os_notifiers.linux import LinuxNotifierLibNotify
-
-                    return LinuxNotifierLibNotify
-                else:
-                    from .os_notifiers.linux import LinuxNotifier
-
-                    return LinuxNotifier
-
-        elif selected_platform == "Darwin":
+        if selected_platform == "Darwin":
             from .os_notifiers.macos import MacOSNotifier
 
             return MacOSNotifier
@@ -143,9 +124,25 @@ class Notify:
                 f"This version of Windows ({platform.release()}) is not supported."
             )
         else:
-            raise UnsupportedPlatform(
-                "Platform couldn't be detected, please manually specifiy platform."
-            )
+            if selected_platform != "Linux":
+                logger.warning(f'{selected_platform} might not be supported!')
+
+            if linux_use_legacy_notifier:
+                from .os_notifiers.linux import LinuxNotifierLibNotify
+
+                return LinuxNotifierLibNotify
+            else:
+
+                from .os_notifiers.linux import NOTIFY
+
+                if NOTIFY:
+                    from .os_notifiers.linux import LinuxNotifierLibNotify
+
+                    return LinuxNotifierLibNotify
+                else:
+                    from .os_notifiers.linux import LinuxNotifier
+
+                    return LinuxNotifier
 
     @staticmethod
     def _verify_audio_path(new_audio_path):

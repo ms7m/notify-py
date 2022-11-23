@@ -23,6 +23,7 @@ class Notify:
         default_notification_title="Default Title",
         default_notification_message="Default Message",
         default_notification_application_name="Python Application (notify.py)",
+        default_notification_urgency='normal',
         default_notification_icon=None,
         default_notification_audio=None,
         enable_logging=False,
@@ -74,6 +75,7 @@ class Notify:
         self._notification_title = default_notification_title
         self._notification_message = default_notification_message
         self._notification_application_name = default_notification_application_name
+        self._notification_urgency = default_notification_urgency
 
         # These defaults require verification
         if default_notification_icon:
@@ -111,16 +113,17 @@ class Notify:
                 return LinuxNotifierLibNotify
             else:
 
-                from .os_notifiers.linux import USE_LEGACY
+                from .os_notifiers.linux import NOTIFY
 
-                if USE_LEGACY == False:
-                    from .os_notifiers.linux import LinuxNotifier
-
-                    return LinuxNotifier
-                else:
+                if NOTIFY:
                     from .os_notifiers.linux import LinuxNotifierLibNotify
 
                     return LinuxNotifierLibNotify
+                else:
+                    from .os_notifiers.linux import LinuxNotifier
+
+                    return LinuxNotifier
+
         elif selected_platform == "Darwin":
             from .os_notifiers.macos import MacOSNotifier
 
@@ -250,6 +253,20 @@ class Notify:
     def application_name(self, new_application_name):
         self._notification_application_name = new_application_name
 
+    @property
+    def urgency(self):
+        """The urgency of the notification (low, normal, critical) 
+        Work only with libnotify (Linux), as of now
+
+        Returns:
+            str: The urgency of the notification.
+        """
+        return self._notification_urgency
+
+    @urgency.setter
+    def urgency(self, new_urgency):
+        self._notification_urgency = new_urgency
+
     def send(self, block=True):
         """Main send function. This will take all attributes sent and forward to
         send_notification.
@@ -288,6 +305,7 @@ class Notify:
             supplied_title=self._notification_title,
             supplied_message=self._notification_message,
             supplied_application_name=self._notification_application_name,
+            supplied_urgency=self._notification_urgency,
             supplied_icon_path=self._notification_icon,
             supplied_audio_path=self._notification_audio,
         )
@@ -301,6 +319,7 @@ class Notify:
         supplied_title,
         supplied_message,
         supplied_application_name,
+        supplied_urgency,
         supplied_icon_path,
         supplied_audio_path,
     ):
@@ -310,6 +329,7 @@ class Notify:
             supplied_title str: Title for notification
             supplied_message str: Message for notification
             supplied_application_name str: Application name for notification (if platform needs it)
+            supplied_urgency str: low, normal, critical | Notification urgency
             supplied_icon_path str: Direct path to custom icon
             supplied_audio_path str: Direct path to custom audio
 
@@ -324,6 +344,7 @@ class Notify:
                 notification_title=str(supplied_title),
                 notification_subtitle=str(supplied_message),
                 application_name=str(supplied_application_name),
+                notification_urgency=str(supplied_urgency),
                 notification_icon=str(supplied_icon_path),
                 notification_audio=str(supplied_audio_path)
                 if supplied_audio_path

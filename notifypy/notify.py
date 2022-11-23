@@ -256,7 +256,7 @@ class Notify:
     @property
     def urgency(self):
         """The urgency of the notification (low, normal, critical) 
-        Work only with libnotify (Linux), as of now
+        Works only with libnotify (Linux), as of now
 
         Returns:
             str: The urgency of the notification.

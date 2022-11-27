@@ -1,7 +1,7 @@
 # Custom and Clear Exceptions for NotifyPy
 
 
-class BaseNotifyPyException(BaseException):
+class BaseNotifyPyException(Exception):
     """Base Exception to be Inheritied"""
 
 

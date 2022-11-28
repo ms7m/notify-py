@@ -19,7 +19,7 @@ jeepney = [
 ]
 
 [tool.poetry.dev-dependencies]
-pytest = "6.*"
+pytest = "6.2.5"
 black = "^20.8b1"
 typed-ast = "1.5.2"
 pylint = "*"

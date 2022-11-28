@@ -33,7 +33,7 @@ except ImportError:
 
 
 class LinuxNotifierLibNotify(BaseNotifier):
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Main Linux Notification Class
 
         This uses libnotify's tool of notfiy-send.

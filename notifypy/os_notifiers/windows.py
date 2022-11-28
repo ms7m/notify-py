@@ -11,7 +11,7 @@ from ._base import BaseNotifier
 
 
 class WindowsNotifier(BaseNotifier):
-    def __init__(self):
+    def __init__(self, **kwargs):
         """Main Notification System for Windows. Basically ported from go-toast/toast"""
 
         # Create the base

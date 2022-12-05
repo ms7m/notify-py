@@ -4,25 +4,26 @@
 name: Test Linux (dbus)
 
 on:
-  push:
-    branches:
-      - dev
-      - master
-    paths:
-      - notifypy/**
-      - tests/**
-      - pyproject.toml
-      - poetry.lock
-  pull_request:
-    branches:
-      - dev
-      - master
-    paths:
-      - notifypy/**
-      - tests/**
-      - pyproject.toml
-      - poetry.lock
-
+  # push:
+  #   branches:
+  #     - dev
+  #     - master
+  #   paths:
+  #     - notifypy/**
+  #     - tests/**
+  #     - pyproject.toml
+  #     - poetry.lock
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - master
+  #   paths:
+  #     - notifypy/**
+  #     - tests/**
+  #     - pyproject.toml
+  #     - poetry.lock
+  workflow_dispatch:
+    
 jobs:
   build:
     runs-on: ubuntu-latest

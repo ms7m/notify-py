@@ -1,31 +1,33 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Test macOS
+name: Test Linux (dbus)
 
 on:
-  push:
-    branches:
-      - dev
-      - master
-    paths:
-      - notifypy/**
-      - tests/**
-      - pyproject.toml
-      - poetry.lock
-  pull_request:
-    branches:
-      - dev
-      - master
-    paths:
-      - notifypy/**
-      - tests/**
-      - pyproject.toml
-      - poetry.lock
-
+  # push:
+  #   branches:
+  #     - dev
+  #     - master
+  #   paths:
+  #     - notifypy/**
+  #     - tests/**
+  #     - pyproject.toml
+  #     - poetry.lock
+  # pull_request:
+  #   branches:
+  #     - dev
+  #     - master
+  #   paths:
+  #     - notifypy/**
+  #     - tests/**
+  #     - pyproject.toml
+  #     - poetry.lock
+  workflow_dispatch:
+    
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
@@ -37,26 +39,35 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+
+      - name: Install OS dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libnotify-bin
+          sudo apt-get install alsa
+          sudo apt-get install curl
+
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: "1.2.1"
 
-          
       - name: Install dependencies
         run: poetry install
-
-
+        
       - name: Lint with pylint
         run: |
           # stop the build if there are Python syntax errors or undefined names
           poetry run pylint --errors-only notifypy/
 
-          
-      - name: Test with pytest
+      - name: Test with pytest (Linux dbus)
         run: |
-          pip install pytest
+          dbus-run-session -- poetry run pytest tests/
+
+      - name: Test with pytest (Linux Libnotify)
+        run: |
           poetry run pytest tests/
+
       - name: Test building package
         run: |
           poetry build

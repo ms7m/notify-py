@@ -19,4 +19,11 @@ jobs:
         with:
           pypi_token: ${{ secrets.PYPI_TOKEN }}
           ignore_dev_requirements: "yes"
-      
+          
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: false
+          files: |
+            LICENSE
+            notifypy

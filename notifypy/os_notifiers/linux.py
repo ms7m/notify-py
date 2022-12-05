@@ -2,27 +2,34 @@ from loguru import logger
 import subprocess
 import shlex
 
-from ..exceptions import BinaryNotFound, NotificationFailure, LinuxDbusException
+from ..exceptions import BinaryNotFound
 from ._base import BaseNotifier
 
 try:
     from jeepney import DBusAddress, new_method_call
     from jeepney.io.blocking import open_dbus_connection
-    import os
+    from shutil import which
 
-    # check if dbus is available
-    _dbus_address = os.getenv("DBUS_SESSION_BUS_ADDRESS")
-    if _dbus_address:
-        logger.info("Jeepney and Dbus is available. Using DBUS for notifications..")
-        USE_LEGACY = False
-    else:
-        logger.error(
-            "Jeepney is available but DBUS is not. Using legacy notification instead."
-        )
-        USE_LEGACY = True
+    NOTIFY = which('notify-send') # alternatively: from ctypes.util import find_library 
+
+    if NOTIFY:
+        logger.info("libnotify found, using it for notifications")
+    else: # check if dbus is available
+        import os
+        _dbus_address = os.getenv("DBUS_SESSION_BUS_ADDRESS")
+        if _dbus_address:
+            logger.info("Jeepney and Dbus is available. Using DBUS for notifications..")
+        else:
+            raise ImportError
+
+    APLAY = which('aplay')
+
+    if APLAY == None:
+        logger.debug("aplay binary not installed.. audio will not work!")
+
+
 except ImportError:
-    logger.error("DBUS suppport not installed. Using libnotify for notifications!")
-    USE_LEGACY = True
+    logger.error("libnotify nor DBUS installed.")
 
 
 class LinuxNotifierLibNotify(BaseNotifier):
@@ -30,53 +37,8 @@ class LinuxNotifierLibNotify(BaseNotifier):
         """Main Linux Notification Class
 
         This uses libnotify's tool of notfiy-send.
-        I'll add support for (and probably use as first choice) sending
-        through dbus.
-
         """
-
-        call_find_notify_send = self._find_installed_notify_send()
-
-        if not call_find_notify_send:
-            logger.error("Unable to find notify-send.")
-            raise BinaryNotFound("notify-send")
-        if call_find_notify_send:
-            self._notify_send_binary = call_find_notify_send
-
-        call_find_aplay = self._find_installed_aplay()
-        if not call_find_aplay:
-            # no Aplay is available.
-            self._aplay_binary = False
-        else:
-            self._aplay_binary = call_find_aplay
-
-    @staticmethod
-    def _find_installed_aplay():
-        """Function to find the path for notify-send"""
-        try:
-            run_which_for_aplay = subprocess.check_output(["which", "aplay"])
-            return run_which_for_aplay.decode("utf-8")
-        except subprocess.CalledProcessError:
-            logger.exception("Unable to find aplay.")
-            return False
-        except Exception:
-            logger.exception("Unhandled exception for finding aplay.")
-            return False
-
-    @staticmethod
-    def _find_installed_notify_send():
-        """Function to find the path for notify-send"""
-        try:
-            run_which_for_notify_send = subprocess.check_output(
-                ["which", "notify-send"]
-            )
-            return run_which_for_notify_send.decode("utf-8")
-        except subprocess.CalledProcessError:
-            logger.exception("Unable to find notify-send.")
-            return False
-        except Exception:
-            logger.exception("Unhandled exception for finding notify-send.")
-            return False
+        pass
 
     def send_notification(
         self,
@@ -87,14 +49,13 @@ class LinuxNotifierLibNotify(BaseNotifier):
         **kwargs,
     ):
         try:
-
             notification_title = " " if notification_title == "" else notification_title
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
             )
 
             generated_command = [
-                self._notify_send_binary.strip(),
+                NOTIFY,
                 notification_title,
                 notification_subtitle,
             ]
@@ -107,14 +68,17 @@ class LinuxNotifierLibNotify(BaseNotifier):
                     f"--app-name={shlex.quote(kwargs.get('application_name'))}"
                 )
 
+            if kwargs.get('notification_urgency'):
+                generated_command.extend(["-u", kwargs.get('notification_urgency')])
+
             logger.debug(f"Generated command: {generated_command}")
             if notification_audio:
 
-                if self._aplay_binary == False:
+                if APLAY == None:
                     raise BinaryNotFound("aplay (Alsa)")
 
                 subprocess.Popen(
-                    [self._aplay_binary.strip(), notification_audio],
+                    [APLAY, notification_audio],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )
@@ -143,31 +107,6 @@ class LinuxNotifier(BaseNotifier):
             interface="org.freedesktop.Notifications",
         )
 
-        call_find_aplay = self._find_installed_aplay()
-        if not call_find_aplay:
-            # no Aplay is available.
-            self._aplay_binary = False
-            logger.debug("aplay binary not installed.. audio will not work!")
-        else:
-            self._aplay_binary = call_find_aplay
-
-        if kwargs.get("linux_fallback_libnotify"):
-            self._fallback_to_libnotify = True
-        else:
-            self._fallback_to_libnotify = False
-
-    @staticmethod
-    def _find_installed_aplay():
-        """Function to find the path for notify-send"""
-        try:
-            run_which_for_aplay = subprocess.check_output(["which", "aplay"])
-            return run_which_for_aplay.decode("utf-8")
-        except subprocess.CalledProcessError:
-            logger.exception("Unable to find aplay.")
-            return False
-        except Exception:
-            logger.exception("Unhandled exception for finding aplay.")
-            return False
 
     def send_notification(
         self,
@@ -182,35 +121,23 @@ class LinuxNotifier(BaseNotifier):
             logger.debug("linux: opened dbus connection")
         except Exception:
             logger.exception("issue with opening DBUS connection!")
-            if self._fallback_to_libnotify == True:
-                logger.debug("falling back to libnotify!")
-                return LinuxNotifierLibNotify().send_notification(
-                    notification_title,
-                    notification_subtitle,
-                    notification_icon,
-                    notification_audio,
-                    **kwargs,
-                )
-            else:
-                logger.exception(
-                    "there was an exception trying to open the dbus connection. fallback was not enabled, therefore this will return False."
-                )
-                return False
+            return False
 
         try:
             notification_title = " " if notification_title == "" else notification_title
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
             )
+
             if notification_audio:
                 # TODO: https://specifications.freedesktop.org/notification-spec/latest/ar01s09.html
                 # use sound param instead of relying on alsa?
 
-                if self._aplay_binary == False:
+                if APLAY == None:
                     raise BinaryNotFound("aplay (Alsa)")
 
                 subprocess.Popen(
-                    [self._aplay_binary.strip(), notification_audio],
+                    [APLAY, notification_audio],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )
@@ -238,13 +165,4 @@ class LinuxNotifier(BaseNotifier):
 
         except Exception:
             logger.exception("issue with sending through dbus!")
-            if self._fallback_to_libnotify == True:
-                logger.debug("falling back to libnotify!")
-                return LinuxNotifierLibNotify().send_notification(
-                    notification_title,
-                    notification_subtitle,
-                    notification_icon,
-                    notification_audio,
-                    **kwargs,
-                )
             return False

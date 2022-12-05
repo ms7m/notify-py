@@ -147,6 +147,7 @@ You may need to add ``python3 -m`` to the beginning.
 - [Leterax](https://github.com/Leterax)
 - [jnoortheen](https://github.com/jnoortheen)
 - [dynobo](https://github.com/dynobo)
+- [Xou](https://github.com/GiorgosXou)
 
 ---
 

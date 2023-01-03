@@ -122,7 +122,7 @@ def your_function():
 A CLI is available when you install notify-py
 
 ```bash
-notify-py --title --message --applicationName --iconPath --soundPath
+notifypy --title --message --applicationName --iconPath --soundPath
 ```
 You may need to add ``python3 -m`` to the beginning.
 
@@ -148,6 +148,7 @@ You may need to add ``python3 -m`` to the beginning.
 - [jnoortheen](https://github.com/jnoortheen)
 - [dynobo](https://github.com/dynobo)
 - [Xou](https://github.com/GiorgosXou)
+
 
 ---
 

@@ -26,4 +26,3 @@ jobs:
           prerelease: false
           files: |
             LICENSE
-            notifypy

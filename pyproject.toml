@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "notify_py"
-version = "0.3.39"
+version = "0.3.41"
 description = "Cross-platform desktop notification library for Python"
 authors = ["Mustafa Mohamed <mustafa@ms7m.me>"]
 repository = "https://github.com/ms7m/notify-py"

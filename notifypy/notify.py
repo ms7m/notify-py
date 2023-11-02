@@ -110,7 +110,7 @@ class Notify:
 
             return MacOSNotifier
         elif selected_platform == "Windows":
-            if platform.release() == "10":
+            if platform.release() in {"10", "11"}:
                 from .os_notifiers.windows import WindowsNotifier
 
                 return WindowsNotifier

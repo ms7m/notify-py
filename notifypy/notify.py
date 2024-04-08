@@ -20,12 +20,12 @@ from .os_notifiers._base import BaseNotifier
 class Notify:
     def __init__(
         self,
-        default_notification_title="Default Title",
-        default_notification_message="Default Message",
-        default_notification_application_name="Python Application (notify.py)",
-        default_notification_urgency='normal',
-        default_notification_icon=None,
-        default_notification_audio=None,
+        title="",
+        message="",
+        app_name="Python",
+        urgency='normal',
+        icon=None,
+        audio=None,
         enable_logging=False,
         **kwargs,
     ):
@@ -72,22 +72,22 @@ class Notify:
         self._notifier = self._notifier_detect(**kwargs)
 
         # Set the defaults.
-        self._notification_title = default_notification_title
-        self._notification_message = default_notification_message
-        self._notification_application_name = default_notification_application_name
-        self._notification_urgency = default_notification_urgency
+        self._notification_title = title
+        self._notification_message = message
+        self._notification_application_name = app_name
+        self._notification_urgency = urgency
 
         # These defaults require verification
-        if default_notification_icon:
-            self._notification_icon = self._verify_icon_path(default_notification_icon)
+        if icon:
+            self._notification_icon = self._verify_icon_path(icon)
         else:
             self._notification_icon = str(
                 os.path.join(os.path.dirname(__file__), "py-logo.png")
             )
 
-        if default_notification_audio:
+        if audio:
             self._notification_audio = self._verify_audio_path(
-                default_notification_audio
+                audio
             )
         else:
             self._notification_audio = None
@@ -237,7 +237,7 @@ class Notify:
         self._notification_message = new_message
 
     @property
-    def application_name(self):
+    def app_name(self):
         """The application name that will be displayed (if the platform allows it.)
         Windows and macOS requires an application name to be displayed.
 
@@ -246,8 +246,8 @@ class Notify:
         """
         return self._notification_application_name
 
-    @application_name.setter
-    def application_name(self, new_application_name):
+    @app_name.setter
+    def app_name(self, new_application_name):
         self._notification_application_name = new_application_name
 
     @property

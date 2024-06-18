@@ -70,6 +70,10 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
             if kwargs.get('notification_urgency'):
                 generated_command.extend(["-u", kwargs.get('notification_urgency')])
+            if kwargs.get("expiry"):
+                generated_command.append(
+                    f"--expire-time={shlex.quote(kwargs.get('expiry'))}"
+                )
 
             logger.debug(f"Generated command: {generated_command}")
             if notification_audio:
@@ -153,7 +157,7 @@ class LinuxNotifier(BaseNotifier):
                     notification_subtitle,
                     [],
                     {},  # Actions, hints
-                    -1,  # expire_timeout (-1 = default)
+                    kwargs.get("expiry", -1),
                 ),
             )
             reply = _attempt_to_open_dbus_connection.send_and_get_reply(

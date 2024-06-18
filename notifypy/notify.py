@@ -26,6 +26,7 @@ class Notify:
         default_notification_urgency='normal',
         default_notification_icon=None,
         default_notification_audio=None,
+        default_expiry=-1,
         enable_logging=False,
         **kwargs,
     ):
@@ -76,6 +77,7 @@ class Notify:
         self._notification_message = default_notification_message
         self._notification_application_name = default_notification_application_name
         self._notification_urgency = default_notification_urgency
+        self._notification_expiry = default_expiry
 
         # These defaults require verification
         if default_notification_icon:
@@ -264,6 +266,20 @@ class Notify:
     def urgency(self, new_urgency):
         self._notification_urgency = new_urgency
 
+    @property
+    def expiry(self):
+        """Expiry time out in milliseconds
+           Tested only for linux (notify-send and libnotify)
+
+        Returns:
+            int: expiry in milliseconds
+        """
+        return self._notification_expiry
+
+    @expiry.setter
+    def expiry(self, new_expiry):
+        self._notification_expiry = new_expiry
+
     def send(self, block=True):
         """Main send function. This will take all attributes sent and forward to
         send_notification.
@@ -305,6 +321,7 @@ class Notify:
             supplied_urgency=self._notification_urgency,
             supplied_icon_path=self._notification_icon,
             supplied_audio_path=self._notification_audio,
+            supplied_expiry=self._notification_expiry,
         )
         if result:
             event.set()
@@ -319,6 +336,7 @@ class Notify:
         supplied_urgency,
         supplied_icon_path,
         supplied_audio_path,
+        supplied_expiry=-1,
     ):
         """A function to handles sending all required variables to respected OS-Notifier.
 
@@ -329,6 +347,7 @@ class Notify:
             supplied_urgency str: low, normal, critical | Notification urgency
             supplied_icon_path str: Direct path to custom icon
             supplied_audio_path str: Direct path to custom audio
+            supplied_expiry int: expiry time in milliseconds
 
         Raises:
             NotificationFailure: If there was an Exception in sending the notification.
@@ -346,6 +365,7 @@ class Notify:
                 notification_audio=str(supplied_audio_path)
                 if supplied_audio_path
                 else None,
+                expiry=int(supplied_expiry),
             )
             if attempt_to_send_notifiation:
                 logger.info("Sent notification.")

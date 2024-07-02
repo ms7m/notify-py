@@ -1,6 +1,5 @@
 from loguru import logger
 import subprocess
-import shlex
 
 from ..exceptions import BinaryNotFound
 from ._base import BaseNotifier
@@ -61,12 +60,10 @@ class LinuxNotifierLibNotify(BaseNotifier):
             ]
 
             if notification_icon:
-                generated_command.append(f"--icon={shlex.quote(notification_icon)}")
+                generated_command.extend(["--icon", notification_icon])
 
             if kwargs.get("application_name"):
-                generated_command.append(
-                    f"--app-name={shlex.quote(kwargs.get('application_name'))}"
-                )
+                generated_command.extend(["--app-name", kwargs.get("application_name")])
 
             if kwargs.get('notification_urgency'):
                 generated_command.extend(["-u", kwargs.get('notification_urgency')])

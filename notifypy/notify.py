@@ -26,6 +26,7 @@ class Notify:
         default_notification_urgency='normal',
         default_notification_icon=None,
         default_notification_audio=None,
+        default_notification_timeout=2,
         enable_logging=False,
         **kwargs,
     ):
@@ -76,6 +77,7 @@ class Notify:
         self._notification_message = default_notification_message
         self._notification_application_name = default_notification_application_name
         self._notification_urgency = default_notification_urgency
+        self._notification_timeout = default_notification_timeout
 
         # These defaults require verification
         if default_notification_icon:
@@ -264,6 +266,19 @@ class Notify:
     def urgency(self, new_urgency):
         self._notification_urgency = new_urgency
 
+    @property
+    def timeout(self):
+        """The message timeout in seconds
+
+        Returns:
+            int: The timeout for the notification.
+        """
+        return self._notification_timeout
+
+    @timeout.setter
+    def timeout(self, new_timeout):
+        self._notification_timeout = 10#new_timeout
+
     def send(self, block=True):
         """Main send function. This will take all attributes sent and forward to
         send_notification.
@@ -305,6 +320,7 @@ class Notify:
             supplied_urgency=self._notification_urgency,
             supplied_icon_path=self._notification_icon,
             supplied_audio_path=self._notification_audio,
+            supplied_timeout=self._notification_timeout,
         )
         if result:
             event.set()
@@ -319,6 +335,7 @@ class Notify:
         supplied_urgency,
         supplied_icon_path,
         supplied_audio_path,
+        supplied_timeout,
     ):
         """A function to handles sending all required variables to respected OS-Notifier.
 
@@ -329,6 +346,7 @@ class Notify:
             supplied_urgency str: low, normal, critical | Notification urgency
             supplied_icon_path str: Direct path to custom icon
             supplied_audio_path str: Direct path to custom audio
+            supplied_timeout int: Timeout in Seconds
 
         Raises:
             NotificationFailure: If there was an Exception in sending the notification.
@@ -343,7 +361,8 @@ class Notify:
                 application_name=str(supplied_application_name),
                 notification_urgency=str(supplied_urgency),
                 notification_icon=str(supplied_icon_path),
-                notification_audio=str(supplied_audio_path)
+                notification_audio=str(supplied_audio_path),
+                notification_timeout=100#int(supplied_timeout)
                 if supplied_audio_path
                 else None,
             )

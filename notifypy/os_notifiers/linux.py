@@ -10,7 +10,7 @@ try:
     from jeepney.io.blocking import open_dbus_connection
     from shutil import which
 
-    NOTIFY = which('notify-send') # alternatively: from ctypes.util import find_library 
+    NOTIFY = which('notify-send') # alternatively: from ctypes.util import find_library
 
     if NOTIFY:
         logger.info("libnotify found, using it for notifications")
@@ -46,9 +46,11 @@ class LinuxNotifierLibNotify(BaseNotifier):
         notification_subtitle,
         notification_icon,
         notification_audio,
+        notification_timeout = 100,
         **kwargs,
     ):
         try:
+            print("TEST",notification_timeout)
             notification_title = " " if notification_title == "" else notification_title
             notification_subtitle = (
                 " " if notification_subtitle == "" else notification_subtitle
@@ -70,6 +72,10 @@ class LinuxNotifierLibNotify(BaseNotifier):
 
             if kwargs.get('notification_urgency'):
                 generated_command.extend(["-u", kwargs.get('notification_urgency')])
+
+            if notification_timeout != -1:
+                generated_command.append(f"--expire-time="+str(notification_timeout*1000))
+                print(generated_command)
 
             logger.debug(f"Generated command: {generated_command}")
             if notification_audio:
@@ -114,6 +120,7 @@ class LinuxNotifier(BaseNotifier):
         notification_subtitle,
         notification_icon,
         notification_audio,
+        notification_timeout = -1,
         **kwargs,
     ):
         try:
@@ -153,7 +160,7 @@ class LinuxNotifier(BaseNotifier):
                     notification_subtitle,
                     [],
                     {},  # Actions, hints
-                    -1,  # expire_timeout (-1 = default)
+                    notification_timeout*1000,  # expire_timeout (-1 = default)
                 ),
             )
             reply = _attempt_to_open_dbus_connection.send_and_get_reply(

@@ -146,8 +146,11 @@ class Notify:
 
     @staticmethod
     def _verify_audio_path(new_audio_path):
+        # fixing issue in new python versions for basename file
+        basename = os.path.basename(new_audio_path)
+        
         # we currently only support .wav files
-        if not new_audio_path.endswith(".wav"):
+        if not basename.endswith(".wav"):
             raise InvalidAudioFormat
 
         # first detect if it already exists.
